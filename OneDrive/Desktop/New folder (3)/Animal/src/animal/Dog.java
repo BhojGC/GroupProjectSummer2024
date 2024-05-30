@@ -12,6 +12,7 @@ public class Dog {
     
     private String name;
     private int age;
+    private int numLegs;
 
     /**
      * @return the name
