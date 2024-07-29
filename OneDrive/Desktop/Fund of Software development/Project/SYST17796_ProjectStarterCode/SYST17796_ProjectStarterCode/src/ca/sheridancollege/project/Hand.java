@@ -15,6 +15,7 @@ class Hand extends GroupOfCards {
     
     public Hand(){
         super(0);
+        //testing git
        // this.setCard(new ArrayList<>());
     }
     
