@@ -58,8 +58,13 @@ public class Main {
         } while (!validPassword);
 
         scanner.close();
+        // testing purpose only
+        ArrayList <PlayingCard> deck = createDeck();
+        for(PlayingCard card : deck){
+            System.out.println(card);
+        }
         
-        System.out.println("Delete Me");
+        
     }
         
     }

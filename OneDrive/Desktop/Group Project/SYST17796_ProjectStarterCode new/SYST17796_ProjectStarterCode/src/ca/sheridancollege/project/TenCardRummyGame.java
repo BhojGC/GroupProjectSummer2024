@@ -28,8 +28,14 @@ public class TenCardRummyGame extends Game {
     
 }
     
-public ArrayList<Card> createDeck(){
-    return null;
+public static ArrayList<PlayingCard> createDeck(){
+    ArrayList<PlayingCard> deck = new ArrayList<>();
+    for(Suit suit : Suit.values()){
+        for(Value value : Value.values()){
+            deck.add(new PlayingCard(suit, value));
+        }
+    }
+    return deck;
 }
 
 private void dealCards(){
