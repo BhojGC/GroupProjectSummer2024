@@ -63,18 +63,16 @@ public class Start {
             // Create player and store in the array
             players[i] = new RummyPlayer(playerName);
             validPassword = false; // Reset for the next player
+            
+            
         }
         
-// to be deleted
+
 TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
+
+rummyGame.dealCards(players[0], numOfPlayers > 1 ? players[1] : null);
     
-    // Create the deck
-    ArrayList<PlayingCard> deck = rummyGame.createDeck();
-    
-    // Print each card in the deck
-    for (PlayingCard card : deck) {
-        System.out.println(card);
-    }
+ 
 
 
 
