@@ -25,10 +25,17 @@ public class TenCardRummyGame extends Game{
     
     public void intiializeGame(){
         ArrayList<PlayingCard> cardList = createDeck();
-        this.deck = new GroupOfCards(cardList);
+        this.deck = new GroupOfCards(cardList.size());
+        this.deck.getCards().addAll(cardList);
         
-        this.discardPile = new GroupOfCards(new ArrayList<>());
-          
+        this.discardPile = new GroupOfCards(0);
+        
+        this.deck.shuffle();
+        
+        this.player1 = new RummyPlayer(player1.getName());
+        this.player2 = new RummyPlayer(player2.getName());
+        
+        dealCards(player1, player2);
     
     
 }
