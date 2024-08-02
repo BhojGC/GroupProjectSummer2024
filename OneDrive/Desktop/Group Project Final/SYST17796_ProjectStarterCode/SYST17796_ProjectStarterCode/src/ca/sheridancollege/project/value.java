@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+package ca.sheridancollege.project;
 
 /**
  *
  * @author gcbho
  */
-public enum Value {
+public enum value {
     ACE(10), 
     TWO(2), 
     THREE(3), 
@@ -31,5 +32,6 @@ public enum Value {
     public int getPoints(){
         return points;
     }
+    
     
 }
