@@ -53,7 +53,7 @@ public ArrayList<PlayingCard> createDeck(){
 
 private void dealCards(RummyPlayer player1, RummyPlayer player2) {
         for (int i = 0; i < deck.getCards().size(); i++) {
-            PlayingCard card = deck.getPlayingCards().get(i);
+            Card card = deck.getCards().get(i);
 
             if (i % 2 != 0) { // Odd index - deal to player1
                 player1.getHand().addCard(card);
