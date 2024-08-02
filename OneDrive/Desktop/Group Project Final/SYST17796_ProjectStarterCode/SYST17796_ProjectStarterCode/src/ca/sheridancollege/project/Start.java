@@ -65,13 +65,19 @@ public class Start {
             validPassword = false; // Reset for the next player
         }
         
-        TenCardRummyGame game = new TenCardRummyGame("Ten Card Rummy");
-        ArrayList<PlayingCard> deck = game.createDeck();
-        System.out.println("Deck Created with "+deck.size()+" cards.");
-        game.dealCards(players[0], players[1]);
-        for(int i =0; i< numOfPlayers; i++){
-            System.out.println(players[i].getName()+" 's hand: "+players[i].getHand());
-        }
+// to be deleted
+TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
+    
+    // Create the deck
+    ArrayList<PlayingCard> deck = rummyGame.createDeck();
+    
+    // Print each card in the deck
+    for (PlayingCard card : deck) {
+        System.out.println(card);
+    }
+
+
+
 
         scanner.close();
     }

@@ -32,8 +32,8 @@ public class TenCardRummyGame extends Game{
         
         this.deck.shuffle();
         
-        this.player1 = new RummyPlayer(player1.getName());
-        this.player2 = new RummyPlayer(player2.getName());
+        this.player1 = new RummyPlayer("player1");
+        this.player2 = new RummyPlayer("player2");
         
         dealCards(player1, player2);
     
@@ -47,7 +47,12 @@ public ArrayList<PlayingCard> createDeck(){
             deck.add(new PlayingCard(suit, value));
         }
     }
+    System.out.println("Deck Created");
+    for(PlayingCard card: deck){
+        System.out.println(card);
+    }
     return deck;
+     
 }
 
 public void dealCards(RummyPlayer player1, RummyPlayer player2) {
@@ -56,8 +61,16 @@ public void dealCards(RummyPlayer player1, RummyPlayer player2) {
 
             if (i % 2 != 0) { // Odd index - deal to player1
                 player1.getHand().addCard(card);
+                System.out.println("Player 1 Hand");
+                for(Card c : player1.getHand().getCards()){
+                    System.out.println(c);
+                }
             } else { // Even index - deal to player2
                 player2.getHand().addCard(card);
+                System.out.println("Player 2 Hand");
+                for(Card cd : player2.getHand().getCards()){
+                    System.out.println(cd);
+                }
             }
         }
     }
