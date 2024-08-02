@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ca.sheridancollege.project;
 
 /**
  *
  * @author gcbho
  */
-public enum value {
+public enum Value {
     ACE(10), 
     TWO(2), 
     THREE(3), 
@@ -23,15 +19,13 @@ public enum value {
     QUEEN(10), 
     KING(10);
     
-    public final int points;
+    private final int points;
     
-    private Value(int points){
+    private Value(int points) {
         this.points = points;
     }
     
-    public int getPoints(){
+    public int getPoints() {
         return points;
     }
-    
-    
 }
