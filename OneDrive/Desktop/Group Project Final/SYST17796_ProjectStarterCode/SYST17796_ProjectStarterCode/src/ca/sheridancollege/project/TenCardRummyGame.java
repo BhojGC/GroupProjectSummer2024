@@ -27,7 +27,7 @@ public class TenCardRummyGame extends Game{
         ArrayList<PlayingCard> cardList = createDeck();
         this.deck = new GroupOfCards(cardList);
         
-        
+        this.discardPile = new GroupOfCards(new ArrayList<>());
           
     
     
