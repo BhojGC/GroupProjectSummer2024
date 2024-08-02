@@ -1,5 +1,6 @@
 package ca.sheridancollege.project;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -62,6 +63,14 @@ public class Start {
             // Create player and store in the array
             players[i] = new RummyPlayer(playerName);
             validPassword = false; // Reset for the next player
+        }
+        
+        TenCardRummyGame game = new TenCardRummyGame("Ten Card Rummy");
+        ArrayList<PlayingCard> deck = game.createDeck();
+        System.out.println("Deck Created with "+deck.size()+" cards.");
+        game.dealCards(players[0], players[1]);
+        for(int i =0; i< numOfPlayers; i++){
+            System.out.println(players[i].getName()+" 's hand: "+players[i].getHand());
         }
 
         scanner.close();

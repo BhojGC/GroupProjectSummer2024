@@ -20,23 +20,15 @@ public class TenCardRummyGame extends Game{
     
     public TenCardRummyGame(String name){
         super(name);
-        intializeGame();
+        intiializeGame();
     }
     
     public void intiializeGame(){
-        //Initialize deck with 52 cards
-        deck = new GroupOfCards(createDeck());
-        //Initialize discard pile
-        discardPile = new GroupOfCards(new ArrayList<>());
-        
-        //Initialize Players
-        player1 = new RummyPlayer(player1.getName());
-        player2 = new RummyPlayer(player2.getName());
-        
-        //Deal cards to players
-        dealcards(player1, player2);
+        ArrayList<PlayingCard> cardList = createDeck();
+        this.deck = new GroupOfCards(cardList);
         
         
+          
     
     
 }
@@ -51,8 +43,8 @@ public ArrayList<PlayingCard> createDeck(){
     return deck;
 }
 
-private void dealCards(RummyPlayer player1, RummyPlayer player2) {
-        for (int i = 0; i < deck.getCards().size(); i++) {
+public void dealCards(RummyPlayer player1, RummyPlayer player2) {
+        for (int i = 0; i < 20; i++) {
             Card card = deck.getCards().get(i);
 
             if (i % 2 != 0) { // Odd index - deal to player1
