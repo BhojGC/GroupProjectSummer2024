@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ca.sheridancollege.project;
 
 import java.util.Scanner;
@@ -11,31 +7,30 @@ import java.util.Scanner;
  * @author gcbho
  */
 public class Start {
-    
-    
-    
-   public static void main (String [] args){
-       
-       Scanner scanner = new Scanner(System.in);
-               int numOfPlayers = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int numOfPlayers = 0;
         boolean validPassword = false;
         PasswordValidator passwordValidator = new PasswordValidator();
 
         // Loop to ensure valid number of players is entered
-        while(true){
-            System.out.println("Enter numbe of Players (1 or 2)");
-            if(scanner.hasNextInt()){
+        while (true) {
+            System.out.println("Enter Number of Players (1 or 2): ");
+            if (scanner.hasNextInt()) {
                 numOfPlayers = scanner.nextInt();
-                if(numOfPlayers ==2 ){
+                if (numOfPlayers == 1 || numOfPlayers == 2) {
                     break;
-                }else{
-                    System.out.println("Please Enter a Valid Number (1 or 2)");
-                    scanner.next();
+                } else {
+                    System.out.println("Number of Players must be either 1 or 2.");
                 }
-                
+            } else {
+                System.out.println("Please Enter a Valid Number (1 or 2)");
+                scanner.next(); // consume invalid input
             }
         }
-        //Array to store players
+
+        // Array to store players
         RummyPlayer[] players = new RummyPlayer[numOfPlayers];
 
         for (int i = 0; i < numOfPlayers; i++) {
@@ -67,11 +62,8 @@ public class Start {
             // Create player and store in the array
             players[i] = new RummyPlayer(playerName);
             validPassword = false; // Reset for the next player
-            scanner.close();
         }
 
-        
-        
+        scanner.close();
     }
-    
 }
