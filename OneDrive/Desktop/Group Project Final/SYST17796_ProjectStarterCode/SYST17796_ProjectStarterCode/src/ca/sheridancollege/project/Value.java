@@ -8,7 +8,7 @@ package ca.sheridancollege.project;
  *
  * @author gcbho
  */
-public class Value {
+public enum Value {
     ACE(10), 
     TWO(2), 
     THREE(3), 
