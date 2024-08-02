@@ -6,6 +6,7 @@ package ca.sheridancollege.project;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,8 +17,6 @@ import java.util.stream.Collectors;
  */
 public class Hand extends GroupOfCards {
     
-    private List<Card> cards;
-    private List<Value> value;
     
     public Hand(){
         super(0);
@@ -26,6 +25,7 @@ public class Hand extends GroupOfCards {
     
     public void addCard(Card card){
         getCards().add(card);
+        setSize(getCards().size());
     }
     
     public void discardCard(Card card){
@@ -33,50 +33,70 @@ public class Hand extends GroupOfCards {
         setSize(getSize()-1);
     }
     
-public List<Card> getPureSequence(){
+/**
+ * Returns a list of cards that form pure sequences.
+ * A pure sequence is a sequence of three or more cards of the same suit in consecutive order.
+ *
+ * @return a list of cards that form pure sequences
+ */
+public List<Card> getPureSequences() {
     List<Card> pureSequences = new ArrayList<>();
-    //Group cards by suit
-    Map<Suit, List<Card>> cardsBySuit = cards.stream()
-                .collect(Collectors.groupingBy(Card::getSuit));
-    //Iterating through each suit to find sequence
-        for (Map.Entry<Suit, List<Card>> entry : cardsBySuit.entrySet()) {
-            Suit suit = entry.getKey();
-            List<Card> suitCards = entry.getValue();
 
-            // Sort the cards in ascending order by their value
-            Collections.sort(suitCards, (c1, c2) -> Integer.compare(c1.getValue().getPoints(), c2.getValue().getPoints()));
+    // Group cards by suit
+    Map<Suit, List<PlayingCard>> cardsBySuit = getCards().stream()
+            .map(card ->(PlayingCard) card)
+            .collect(Collectors.groupingBy(PlayingCard::getSuit));
 
-            // Find sequences within the sorted list
-            List<Card> currentSequence = new ArrayList<>();
-            for (int i = 0; i < suitCards.size(); i++) {
-                if (currentSequence.isEmpty()) {
-                    currentSequence.add(suitCards.get(i));
-                } else {
-                    Card lastCard = currentSequence.get(currentSequence.size() - 1);
-                    Card currentCard = suitCards.get(i);
+    // Iterate through each suit to find sequences
+    for (Map.Entry<Suit, List<PlayingCard>> entry : cardsBySuit.entrySet()) {
+        List<PlayingCard> suitCards = entry.getValue();
 
-                    // Check if the current card is the next consecutive value
-                    if (currentCard.getValue().getPoints() == lastCard.getValue().getPoints() + 1) {
-                        currentSequence.add(currentCard);
-                    } else {
-                        // If sequence breaks, check if it is valid and reset
-                        if (currentSequence.size() >= 3) {
-                            pureSequences.addAll(currentSequence);
-                        }
-                        currentSequence.clear();
-                        currentSequence.add(currentCard);
-                    }
-                }
-            }
+        // Sort the cards in ascending order by their value
+        suitCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card).getValue().getPoints()));
 
-            // Check the last sequence
-            if (currentSequence.size() >= 3) {
-                pureSequences.addAll(currentSequence);
+        // Find sequences within the sorted list
+        List<Card> currentSequence = new ArrayList<>();
+        for (Card card : suitCards) {
+            if (currentSequence.isEmpty() || isConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+                currentSequence.add(card);
+            } else {
+                // If sequence breaks, check if it is valid and reset
+                addValidSequence(pureSequences, currentSequence);
+                currentSequence.clear();
+                currentSequence.add(card);
             }
         }
 
-        return pureSequences;
+        // Check the last sequence
+        addValidSequence(pureSequences, currentSequence);
     }
+
+    return pureSequences;
+}
+
+/**
+ * Checks if two cards are consecutive.
+ *
+ * @param card1 the first card
+ * @param card2 the second card
+ * @return true if the cards are consecutive, false otherwise
+ */
+private boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
+    return card1.getValue().getPoints() == card2.getValue().getPoints() + 1;
+}
+
+/**
+ * Adds a valid sequence to the list of pure sequences.
+ *
+ * @param pureSequences the list of pure sequences
+ * @param sequence      the sequence to add
+ */
+private void addValidSequence(List<Card> pureSequences, List<Card> sequence) {
+    if (sequence.size() >= 3) {
+        pureSequences.addAll(sequence);
+    }
+}
+    
 
 
 public List<Card> getImpureSequence(){
