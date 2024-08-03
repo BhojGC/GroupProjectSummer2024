@@ -103,7 +103,8 @@ public List<Card> getImpureSequence(){
     List <Card> impureSequence = new ArrayList<>();
     List<Card> allCards = getCards()
             .stream()
-            .map(card ->(PlayingCard) card).collect(Collectors.toList());
+            .map(card ->(PlayingCard) card)
+            .collect(Collectors.toList());
     //Sorting all cards regardless of suit
     allCards.sort(Comparator.comparingInt(card -> ((PlayingCard)card)
             .getValue()
@@ -144,8 +145,36 @@ public List<Card> getImpureSequence(){
     return impureSequence;
 }
 
+/*public boolean isValidHand(){
+    List<Card> pureSequences = getPureSequences();
+    List<Card> impureSequences = getImpureSequence();
+    
+    // checking for at leat one pure sequence
+    
+    boolean hasPureSequence = !pureSequences.isEmpty();
+    
+    //chcking for at least two sequences (either pure or impure)
+    boolean hasAtleastTwoSequences = (pureSequences.size() >=3 && impureSequences.size() >=3) ||
+                                                            (pureSequences.size() >=6) || (impureSequences.size() >=6);
+    
+    // A valid hand must have at least one pure sequence and at least one additional sequence (pure or impure)
+    return hasPureSequence && hasAtleastTwoSequences;
+}
+*/
 public boolean isValidHand(){
-    return false;
+    List<Card> pureSequences = getPureSequences();
+    List<Card> impureSequences = getImpureSequence();
+    
+    //checking for at least one pure sequence
+    boolean hasPureSequence = !pureSequences.isEmpty();
+    
+    //checking if at least one valid additional sequence
+    boolean hasAdditionalSequence = (pureSequences.size() >=4 || impureSequences.isEmpty() || impureSequences.size() >=3);
+    
+    //check if there is at least one valid additional sequence(pure sequence or impure sequence or group of 3 value cards
+    boolean hasAdditionalValidSequence = hasPureSequence || !impureSequences.isEmpty() || impureSequences.size() >=3;
+    
+    return hasPureSequence && hasAdditionalSequence  && hasAdditionalValidSequence;
 }
 
 @Override
