@@ -117,7 +117,7 @@ public class Start {
             players[0].getHand().addCard(player1DrawnCard);
             System.out.println("Player 1 drew from the deck: "+ player1DrawnCard);
             players[0].getHand().discardCard(player1DrawnCard);
-            rummyGame.discardToPile(player[0], player1DrawnCard);
+            rummyGame.discardToPile(players[0], player1DrawnCard);
             System.out.println("Player 1 discarded card : "+player1DrawnCard);
         }
         if(numOfPlayers >1){
