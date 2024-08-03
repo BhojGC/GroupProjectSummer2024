@@ -134,11 +134,13 @@ System.out.println(discardPile.getCards().get(0));
         }
     }
 
-    public Card drawCardFromDeck() {
+    public Card drawCardFromDeck(RummyPlayer player) {
         if (deck.getSize() > 0) {
             Card drawnCard = deck.getCards().remove(0);
             deck.setSize(deck.getSize() - 1);
+            System.out.println(player.getName()+" Drew "+drawnCard+" from deck.");
             return drawnCard;
+            
         } else {
             System.out.println("Deck is empty");
             return null;

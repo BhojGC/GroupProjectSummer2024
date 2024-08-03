@@ -80,22 +80,7 @@ public class Start {
            int player2PointsInHand =  rummyGame.evaluatePointsInHand(players[1]);
            System.out.println("Player 2 Points in hand: "+ player2PointsInHand);
         }
-        //Drawing a card from the deck for player 1
-        Card player1DrawnCard = rummyGame.drawCardFromDeck();
-        if(player1DrawnCard != null){
-            players[0].getHand().addCard(player1DrawnCard);
-            System.out.println("Player 1 drew from the deck: "+ player1DrawnCard);
-        }
-        if(numOfPlayers >1){
-            //Drawing a card from the discard pile for player 2
-            Card player2DrawnCard = rummyGame.drawCardFromDiscardPile();
-            if(player2DrawnCard != null){
-                players[1].getHand().addCard(player2DrawnCard);
-                System.out.println("Player 2 drew from the Discard Pile:  "+ player2DrawnCard);
-            }
-        }
-
-// Check for pure sequences in player 1's hand
+       // Check for pure sequences in player 1's hand
         List<Card> player1PureSequences = players[0].getHand().getPureSequences();
         if (!player1PureSequences.isEmpty()) {
             System.out.println("Player 1 has pure sequences: " + player1PureSequences);
@@ -126,6 +111,25 @@ public class Start {
             } else {
                 System.out.println("Player 2 does not have any impure Sequences.");
             }
+             //Drawing a card from the deck for player 1
+        Card player1DrawnCard = rummyGame.drawCardFromDeck(players[0]);
+        if(player1DrawnCard != null){
+            players[0].getHand().addCard(player1DrawnCard);
+            System.out.println("Player 1 drew from the deck: "+ player1DrawnCard);
+            players[0].getHand().discardCard(player1DrawnCard);
+            rummyGame.discardToPile(player[0], player1DrawnCard);
+            System.out.println("Player 1 discarded card : "+player1DrawnCard);
+        }
+        if(numOfPlayers >1){
+            //Drawing a card from the discard pile for player 2
+            Card player2DrawnCard = rummyGame.drawCardFromDiscardPile();
+            if(player2DrawnCard != null){
+                players[1].getHand().addCard(player2DrawnCard);
+                System.out.println("Player 2 drew from the Discard Pile:  "+ player2DrawnCard);
+            }
+        }
+        
+        
         }
         
         scanner.close();
