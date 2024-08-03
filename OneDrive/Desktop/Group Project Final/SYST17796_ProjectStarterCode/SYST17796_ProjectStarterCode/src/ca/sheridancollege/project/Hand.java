@@ -81,18 +81,60 @@ public class Hand extends GroupOfCards {
      * @return true if the cards are consecutive, false otherwise
      */
     private boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
-       int value1 = card1.getValue().getPoints();
-       int value2 = card2.getValue().getPoints();
-       
-       if(value1 == value2+1){
-           return true;
-       }else if (value1 ==10 && value2 == 9){
-           return true;           
-       }else if(value1 == 9 && value2 == 10){
-           return true;
-       }
-       return false;
+    Value value1 = card1.getValue();
+    Value value2 = card2.getValue();
+
+    // Convert face cards to their sequential values
+    int seqValue1 = getSequentialValue(value1);
+    int seqValue2 = getSequentialValue(value2);
+
+    // Case where Ace is treated as "1"
+    if ((seqValue1 == 1 && seqValue2 == 2) || (seqValue1 == 2 && seqValue2 == 1)) {
+        return true;
     }
+
+    // Case where Ace is treated as high after King
+    if ((seqValue1 == 13 && seqValue2 == 1) || (seqValue1 == 1 && seqValue2 == 13)) {
+        return true;
+    }
+
+    // General case to check if the cards are numerically consecutive
+    return Math.abs(seqValue1 - seqValue2) == 1;
+}
+
+private int getSequentialValue(Value value) {
+    switch (value) {
+        case ACE:
+            return 1; // Ace as "1"
+        case TWO:
+            return 2;
+        case THREE:
+            return 3;
+        case FOUR:
+            return 4;
+        case FIVE:
+            return 5;
+        case SIX:
+            return 6;
+        case SEVEN:
+            return 7;
+        case EIGHT:
+            return 8;
+        case NINE:
+            return 9;
+        case TEN:
+            return 10;
+        case JACK:
+            return 11;
+        case QUEEN:
+            return 12;
+        case KING:
+            return 13;
+        default:
+            throw new IllegalArgumentException("Unknown card value: " + value);
+    }
+}
+
 
     /**
      * Adds a valid sequence to the list of pure sequences.
@@ -104,6 +146,7 @@ public class Hand extends GroupOfCards {
         if (sequence.size() >= 3) {
             pureSequences.addAll(sequence);
         }
+        
     }
 
     public List<Card> getImpureSequence() {

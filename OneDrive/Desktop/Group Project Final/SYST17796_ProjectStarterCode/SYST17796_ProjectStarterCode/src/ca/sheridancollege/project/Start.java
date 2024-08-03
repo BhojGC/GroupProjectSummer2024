@@ -69,6 +69,10 @@ public class Start {
         }
         
        TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
+       
+        rummyGame.play();
+       
+       
         
       /*  rummyGame.dealCards(players[0], numOfPlayers > 1 ? players[1] : null);
         rummyGame.arrangeCards(players[0]);

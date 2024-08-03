@@ -28,7 +28,7 @@ public class TenCardRummyGame extends Game {
 
     public TenCardRummyGame(String name) {
         super(name);
-        this.scanner = scanner;
+        this.scanner = new Scanner(System.in);
         intializeGame();
     }
 
@@ -58,39 +58,42 @@ public class TenCardRummyGame extends Game {
         this.discardPile.getCards().add(topCard);
         this.discardPile.setSize(1);
         System.out.println("Discard Pile Card: " + discardPile.getCards().get(0));
-        
 
     }
+
     @Override
     public void play() {
         boolean gameOnGoing = true;
-        int turn =0;
-        
-        while(gameOnGoing){
-            RummyPlayer currentPlayer = (turn ==0) ? player1:player2;
-            System.out.println("Player "+(turn+1)+" Turn:");
+        int turn = 0;
+
+        while (gameOnGoing) {
+            RummyPlayer currentPlayer = (turn == 0) ? player1 : player2;
+            System.out.println("Player " + (turn + 1) + " Turn:");
             System.out.println("PRESS 1 TO PICK FROM DECK");
             System.out.println("PRESS 2 TO PICK FROM DISCARD PILE");
-            
+
             int choice = scanner.nextInt();
-            switch(choice){
+            switch (choice) {
                 case 1:
                     Card drawnFromDeck = drawCardFromDeck(currentPlayer);
-                    if(drawnFromDeck != null){
+                    if (drawnFromDeck != null) {
                         currentPlayer.getHand().addCard(drawnFromDeck);
                     }
                     break;
                 case 2:
                     Card drawnFromDiscardPile = drawCardFromDiscardPile();
-                    if(drawnFromDiscardPile != null){
+                    if (drawnFromDiscardPile != null) {
                         currentPlayer.getHand().addCard(drawnFromDiscardPile);
                     }
                     break;
                 default:
                     System.out.println("Invalid Choice. Try again.");
                     continue;
+
             }
-            
+            //printHand(currentPlayer);
+            arrangeCards(currentPlayer);
+
         }
     }
 
@@ -101,17 +104,19 @@ public class TenCardRummyGame extends Game {
                 deck.add(new PlayingCard(suit, value));
             }
         }
-        //System.out.println("Deck Created");
-        //for (PlayingCard card : deck) {
-          //  System.out.println(card);
-        //}
+        System.out.println("Deck Created");
+        for (PlayingCard card : deck) {
+        System.out.println(card);
+        
+        }
+        System.out.println(deck.size());
         return deck;
 
     }
 
     public void dealCards(RummyPlayer player1, RummyPlayer player2) {
         for (int i = 0; i < 20; i++) {
-            Card card = deck.getCards().get(i);
+            Card card = deck.getCards().remove (0);
 
             if (i % 2 != 0) { // Odd index - deal to player1
                 player1.getHand().addCard(card);
@@ -200,26 +205,24 @@ public class TenCardRummyGame extends Game {
 
         List<Card> pureSequence = hand.getPureSequences();
         if (pureSequence.isEmpty()) {
-            System.out.println ();
+            System.out.println();
         } else {
             System.out.println(player.getName() + " Pure Sequences: ");
-            for(Card sequence: pureSequence){
+            for (Card sequence : pureSequence) {
                 System.out.println(sequence);
             }
         }
 
         List<Card> impureSequence = hand.getImpureSequence();
         if (impureSequence.isEmpty()) {
-            System.out.println ();
+            System.out.println();
         } else {
             System.out.println(player.getName() + " Impure Sequences: ");
-            for(Card sequence: pureSequence){
+            for (Card sequence : pureSequence) {
                 System.out.println(sequence);
             }
         }
     }
-
-    
 
     public boolean declareHand(RummyPlayer player) {
         return player.getHand().isValidHand();
@@ -293,5 +296,15 @@ public class TenCardRummyGame extends Game {
 
         //printing the sorted cards Array
         System.out.println(player.getName() + "\n" + sortedCards);
+    }
+
+    public void printHand(RummyPlayer player) {
+        Hand hand = player.getHand();
+        if (hand.getCards().isEmpty()) {
+            System.out.println("Hand is Empty");
+        }
+        for (Card card : hand.getCards()) {
+            System.out.println(card);
+        }
     }
 }
