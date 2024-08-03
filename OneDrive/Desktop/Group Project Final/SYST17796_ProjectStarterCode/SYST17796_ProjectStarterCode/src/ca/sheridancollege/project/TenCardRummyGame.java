@@ -5,6 +5,7 @@
 package ca.sheridancollege.project;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +18,8 @@ public class TenCardRummyGame extends Game{
     private RummyPlayer player2;
     private int player1totalPoints;
     private int player2totalPoints;
+    private int player1PointsInHand;
+    private int player2PointsInHand;
     
     public TenCardRummyGame(String name){
         super(name);
@@ -75,6 +78,40 @@ public void dealCards(RummyPlayer player1, RummyPlayer player2) {
         }
     }
 
+private void evaludatePointsInHand(RummyPlayer player){
+    Hand hand = player.getHand();
+    
+    //checking for pure sequence
+    List<Card> pureSequences = hand.getPureSequences();
+    boolean hasPureSequence = !pureSequences.isEmpty();
+    
+   if(hasPureSequence == true){
+       //checking for impure sequence
+       List<Card> impureSequences = hand.getImpureSequence();
+       int pointsInHand  = pureSequences.stream()
+               .mapToInt(card ->((PlayingCard) card).getValue().getPoints())
+               .sum();
+       pointsInHand += impureSequences.stream()
+                    .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
+                    .sum();
+       if(player == player1){
+           player1PointsInHand = pointsinHand;
+       }else if(player == player2){
+           player2PointsInHand = pointsInHand;
+       }
+       
+      
+       
+   }else{
+       if(player == player1){
+           player1PointsInHand =100;
+       }else if(player == player2){
+           player2PointsInHand =100;
+       }
+   }
+    
+}
+
 @Override
 public void play(){
     
@@ -109,5 +146,35 @@ public void endRound(RummyPlayer player){
 public void declareWinner(){
     
 }
+
+    /**
+     * @return the player1pointsInHand
+     */
+    public int getPlayer1pointsInHand() {
+        return player1PointsInHand;
+    }
+
+    /**
+     * @param player1pointsInHand the player1pointsInHand to set
+     */
+    public void setPlayer1pointsInHand(int player1PointsInHand) {
+        this.player1PointsInHand = player1PointsInHand;
+    }
+
+    /**
+     * @return the player2pointsInHand
+     */
+    public int getPlayer2pointsInHand() {
+        return player2PointsInHand;
+    }
+
+    /**
+     * @param player2pointsInHand the player2pointsInHand to set
+     */
+    public void setPlayer2pointsInHand(int player2PointsInHand) {
+        this.player2PointsInHand = player2PointsInHand;
+    }
+
+
     
 }
