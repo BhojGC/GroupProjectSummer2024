@@ -95,7 +95,7 @@ private void evaludatePointsInHand(RummyPlayer player){
                     .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
                     .sum();
        if(player == player1){
-           player1PointsInHand = pointsinHand;
+           player1PointsInHand = pointsInHand;
        }else if(player == player2){
            player2PointsInHand = pointsInHand;
        }
