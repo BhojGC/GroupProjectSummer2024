@@ -177,6 +177,12 @@ public boolean isValidHand(){
     return hasPureSequence && hasAdditionalSequence  && hasAdditionalValidSequence;
 }
 
+public void arrangeCards(){
+    //sorting cards first by suit, then by value within each suit
+     getCards().sort(Comparator.comparing((Card card) -> ((PlayingCard) card).getSuit())
+                              .thenComparing(card -> ((PlayingCard) card).getValue().getPoints()));
+}
+
 @Override
 public String toString(){
     
