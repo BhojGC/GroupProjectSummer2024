@@ -8,18 +8,19 @@ package ca.sheridancollege.project;
  *
  * @author gcbho
  */
-public class PlayingCard extends Card{
+public class PlayingCard extends Card {
+
     private Suit suit;
     private Value value;
-    
-    public PlayingCard(Suit suit, Value value){
+
+    public PlayingCard(Suit suit, Value value) {
         this.suit = suit;
         this.value = value;
     }
-    
+
     @Override
-    public String toString(){
-        return getValue() +"of "+ getSuit();
+    public String toString() {
+        return getValue() + " of " + getSuit();
     }
 
     /**
@@ -49,5 +50,5 @@ public class PlayingCard extends Card{
     public void setValue(Value value) {
         this.value = value;
     }
-    
+
 }
