@@ -35,8 +35,8 @@ public class TenCardRummyGame extends Game {
         this.deck.getCards().addAll(cardList);
 
         this.discardPile = new GroupOfCards(0);
-
-        this.deck.shuffle();
+        
+         this.deck.shuffle();
 
         this.player1 = new RummyPlayer("player1");
         this.player2 = new RummyPlayer("player2");
@@ -46,6 +46,9 @@ public class TenCardRummyGame extends Game {
         evaluatePointsInHand(player1);
         arrangeCards(player2);
         evaluatePointsInHand(player2);
+        
+        discardPile.getCards().add(deck.getCards().remove(0));
+        discardPile.setSize(discardPile.getSize()+1);
 
     }
 
@@ -138,6 +141,15 @@ public class TenCardRummyGame extends Game {
             System.out.println("Deck is empty");
             return null;
         }
+    }
+    
+    public void discardToPile(RummyPlayer player, Card card){
+        //Removing the card from the player's hand
+        player.getHand().discardCard(card);
+        //adding the discarded card to the discardPile
+        discardPile.getCards().add(0, card);
+        discardPile.setSize(discardPile.getSize()+1);
+        System.out.println(player.getName()+" discarded "+ card);
     }
 
     @Override
