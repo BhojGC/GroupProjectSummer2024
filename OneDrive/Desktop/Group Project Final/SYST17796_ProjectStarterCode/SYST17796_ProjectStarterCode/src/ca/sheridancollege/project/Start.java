@@ -10,6 +10,7 @@ import java.util.Scanner;
  */
 public class Start {
     
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int numOfPlayers = 0;
@@ -69,7 +70,7 @@ public class Start {
         
        TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
         
-        rummyGame.dealCards(players[0], numOfPlayers > 1 ? players[1] : null);
+      /*  rummyGame.dealCards(players[0], numOfPlayers > 1 ? players[1] : null);
         rummyGame.arrangeCards(players[0]);
         if (numOfPlayers > 1) {
             rummyGame.arrangeCards(players[1]);
@@ -130,7 +131,7 @@ public class Start {
         }
         
         
-        }
+        }*/
         
         scanner.close();
     }

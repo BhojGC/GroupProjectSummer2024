@@ -81,7 +81,17 @@ public class Hand extends GroupOfCards {
      * @return true if the cards are consecutive, false otherwise
      */
     private boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
-        return card1.getValue().getPoints() == card2.getValue().getPoints() + 1;
+       int value1 = card1.getValue().getPoints();
+       int value2 = card2.getValue().getPoints();
+       
+       if(value1 == value2+1){
+           return true;
+       }else if (value1 ==10 && value2 == 9){
+           return true;           
+       }else if(value1 == 9 && value2 == 10){
+           return true;
+       }
+       return false;
     }
 
     /**

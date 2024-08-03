@@ -7,6 +7,7 @@ package ca.sheridancollege.project;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**
@@ -23,20 +24,23 @@ public class TenCardRummyGame extends Game {
     private int player2totalPoints;
     private int player1PointsInHand;
     private int player2PointsInHand;
+    private Scanner scanner;
 
     public TenCardRummyGame(String name) {
         super(name);
-        intiializeGame();
+        this.scanner = scanner;
+        intializeGame();
     }
 
-    public void intiializeGame() {
+    public void intializeGame() {
         ArrayList<PlayingCard> cardList = createDeck();
+
         this.deck = new GroupOfCards(cardList.size());
         this.deck.getCards().addAll(cardList);
 
         this.discardPile = new GroupOfCards(0);
-        
-         this.deck.shuffle();
+
+        this.deck.shuffle();
 
         this.player1 = new RummyPlayer("player1");
         this.player2 = new RummyPlayer("player2");
@@ -44,14 +48,50 @@ public class TenCardRummyGame extends Game {
         dealCards(player1, player2);
         arrangeCards(player1);
         evaluatePointsInHand(player1);
+        printSequences(player1);
+
         arrangeCards(player2);
         evaluatePointsInHand(player2);
-        
-Card topCard = this.deck.getCards().remove(0);
-this.discardPile.getCards().add(topCard);
-this.discardPile.setSize(1);
-System.out.println(discardPile.getCards().get(0));
+        printSequences(player2);
 
+        Card topCard = this.deck.getCards().remove(0);
+        this.discardPile.getCards().add(topCard);
+        this.discardPile.setSize(1);
+        System.out.println("Discard Pile Card: " + discardPile.getCards().get(0));
+        
+
+    }
+    @Override
+    public void play() {
+        boolean gameOnGoing = true;
+        int turn =0;
+        
+        while(gameOnGoing){
+            RummyPlayer currentPlayer = (turn ==0) ? player1:player2;
+            System.out.println("Player "+(turn+1)+" Turn:");
+            System.out.println("PRESS 1 TO PICK FROM DECK");
+            System.out.println("PRESS 2 TO PICK FROM DISCARD PILE");
+            
+            int choice = scanner.nextInt();
+            switch(choice){
+                case 1:
+                    Card drawnFromDeck = drawCardFromDeck(currentPlayer);
+                    if(drawnFromDeck != null){
+                        currentPlayer.getHand().addCard(drawnFromDeck);
+                    }
+                    break;
+                case 2:
+                    Card drawnFromDiscardPile = drawCardFromDiscardPile();
+                    if(drawnFromDiscardPile != null){
+                        currentPlayer.getHand().addCard(drawnFromDiscardPile);
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid Choice. Try again.");
+                    continue;
+            }
+            
+        }
     }
 
     public ArrayList<PlayingCard> createDeck() {
@@ -61,10 +101,10 @@ System.out.println(discardPile.getCards().get(0));
                 deck.add(new PlayingCard(suit, value));
             }
         }
-        System.out.println("Deck Created");
-        for (PlayingCard card : deck) {
-            System.out.println(card);
-        }
+        //System.out.println("Deck Created");
+        //for (PlayingCard card : deck) {
+          //  System.out.println(card);
+        //}
         return deck;
 
     }
@@ -75,14 +115,14 @@ System.out.println(discardPile.getCards().get(0));
 
             if (i % 2 != 0) { // Odd index - deal to player1
                 player1.getHand().addCard(card);
-                
+
                 //System.out.println("Player 1 Hand");
                 //for(Card c : player1.getHand().getCards()){
                 // System.out.println(c);
                 //}
             } else { // Even index - deal to player2
                 player2.getHand().addCard(card);
-                
+
                 //System.out.println("Player 2 Hand");
                 //for(Card cd : player2.getHand().getCards()){
                 //  System.out.println(cd);
@@ -108,22 +148,21 @@ System.out.println(discardPile.getCards().get(0));
             pointsInHand += impureSequences.stream()
                     .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
                     .sum();
-            
+
         } else {
-            pointsInHand =100;
+            pointsInHand = 100;
         }
         if (player == player1) {
-                player1PointsInHand = pointsInHand;
-            } else if (player == player2) {
-                player2PointsInHand = pointsInHand;
-            }
-        System.out.println(player.getName()+" points in hand: "+pointsInHand);
+            player1PointsInHand = pointsInHand;
+        } else if (player == player2) {
+            player2PointsInHand = pointsInHand;
+        }
+        System.out.println(player.getName() + " points in hand: " + pointsInHand);
         return pointsInHand;
-        
 
     }
-    
-     public Card drawCardFromDiscardPile() {
+
+    public Card drawCardFromDiscardPile() {
         if (discardPile.getSize() > 0) {
             Card drawnCard = discardPile.getCards().remove(0);
             discardPile.setSize(discardPile.getSize() - 1);
@@ -138,28 +177,49 @@ System.out.println(discardPile.getCards().get(0));
         if (deck.getSize() > 0) {
             Card drawnCard = deck.getCards().remove(0);
             deck.setSize(deck.getSize() - 1);
-            System.out.println(player.getName()+" Drew "+drawnCard+" from deck.");
+            System.out.println(player.getName() + " Drew " + drawnCard + " from deck.");
             return drawnCard;
-            
+
         } else {
             System.out.println("Deck is empty");
             return null;
         }
     }
-    
-    public void discardToPile(RummyPlayer player, Card card){
+
+    public void discardToPile(RummyPlayer player, Card card) {
         //Removing the card from the player's hand
         player.getHand().discardCard(card);
         //adding the discarded card to the discardPile
         discardPile.getCards().add(0, card);
-        discardPile.setSize(discardPile.getSize()+1);
-        System.out.println(player.getName()+" discarded "+ card);
+        discardPile.setSize(discardPile.getSize() + 1);
+        System.out.println(player.getName() + " discarded " + card);
     }
 
-    @Override
-    public void play() {
+    public void printSequences(RummyPlayer player) {
+        Hand hand = player.getHand();
 
+        List<Card> pureSequence = hand.getPureSequences();
+        if (pureSequence.isEmpty()) {
+            System.out.println ();
+        } else {
+            System.out.println(player.getName() + " Pure Sequences: ");
+            for(Card sequence: pureSequence){
+                System.out.println(sequence);
+            }
+        }
+
+        List<Card> impureSequence = hand.getImpureSequence();
+        if (impureSequence.isEmpty()) {
+            System.out.println ();
+        } else {
+            System.out.println(player.getName() + " Impure Sequences: ");
+            for(Card sequence: pureSequence){
+                System.out.println(sequence);
+            }
+        }
     }
+
+    
 
     public boolean declareHand(RummyPlayer player) {
         return player.getHand().isValidHand();
