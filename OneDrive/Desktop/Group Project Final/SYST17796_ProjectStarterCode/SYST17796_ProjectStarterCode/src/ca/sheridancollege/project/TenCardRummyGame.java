@@ -112,6 +112,28 @@ public class TenCardRummyGame extends Game {
         }
 
     }
+    
+     public Card drawCardFromDiscardPile(GroupOfCards discardPile) {
+        if (discardPile.getSize() > 0) {
+            Card drawnCard = discardPile.getCards().remove(0);
+            discardPile.setSize(discardPile.getSize() - 1);
+            return drawnCard;
+        } else {
+            System.out.println("Discard Pile is Empty");
+            return null;
+        }
+    }
+
+    public Card drawCardFromDeck(GroupOfCards deck) {
+        if (deck.getSize() > 0) {
+            Card drawnCard = deck.getCards().remove(0);
+            deck.setSize(deck.getSize() - 1);
+            return drawnCard;
+        } else {
+            System.out.println("Deck is empty");
+            return null;
+        }
+    }
 
     @Override
     public void play() {

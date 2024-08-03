@@ -67,12 +67,26 @@ public class Start {
             
         }
         
-        TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
+       TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
         
         rummyGame.dealCards(players[0], numOfPlayers > 1 ? players[1] : null);
         rummyGame.arrangeCards(players[0]);
         if (numOfPlayers > 1) {
             rummyGame.arrangeCards(players[1]);
+        }
+        //Drawing a card from the deck for player 1
+        Card player1DrawnCard = rummyGame.drawCardFromDeck();
+        if(player1DrawCard != null){
+            players[0].getHand().addCard(player1DrawnCard);
+            System.out.println("Player 1 drew from the deck: "+ player1DrawnCard);
+        }
+        if(numOfPlayers >1){
+            //Drawing a card from the discard pile for player 2
+            Card player2DrawnCard = rummyGame.drawCardFromDiscardPile();
+            if(player2DrawnCard != null){
+                players[1].getHand().addCard(player2DrawnCard);
+                System.out.println("Player 2 drew from the Discard Pile:  "+ player2DrawnCard);
+            }
         }
 
 // Check for pure sequences in player 1's hand
