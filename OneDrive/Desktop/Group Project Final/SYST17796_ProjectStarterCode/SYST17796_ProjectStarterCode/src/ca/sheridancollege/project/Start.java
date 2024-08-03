@@ -1,6 +1,7 @@
 package ca.sheridancollege.project;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -71,6 +72,24 @@ public class Start {
 TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
 
 rummyGame.dealCards(players[0], numOfPlayers > 1 ? players[1] : null);
+
+// Check for pure sequences in player 1's hand
+List<Card> player1PureSequences = players[0].getHand().getPureSequences();
+if (!player1PureSequences.isEmpty()) {
+    System.out.println("Player 1 has pure sequences: " + player1PureSequences);
+} else {
+    System.out.println("Player 1 does not have any pure sequences.");
+}
+
+// Check for pure sequences in player 2's hand (if player 2 exists)
+if (numOfPlayers > 1) {
+    List<Card> player2PureSequences = players[1].getHand().getPureSequences();
+    if (!player2PureSequences.isEmpty()) {
+        System.out.println("Player 2 has pure sequences: " + player2PureSequences);
+    } else {
+        System.out.println("Player 2 does not have any pure sequences.");
+    }
+}
     
  
 
