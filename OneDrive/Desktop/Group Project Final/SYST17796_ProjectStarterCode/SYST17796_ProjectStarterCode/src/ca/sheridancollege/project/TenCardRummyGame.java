@@ -15,8 +15,8 @@ public class TenCardRummyGame extends Game{
     private GroupOfCards discardPile;
     private RummyPlayer player1;
     private RummyPlayer player2;
-    private int player1Points;
-    private int player2Points;
+    private int player1totalPoints;
+    private int player2totalPoints;
     
     public TenCardRummyGame(String name){
         super(name);
@@ -81,14 +81,27 @@ public void play(){
 }
 
 public boolean declareHand(RummyPlayer player){
-    return false;
+    return player.getHand().isValidHand();
 }
 
 public boolean verifyDeclaration(RummyPlayer player){
-    return false;
+    //verifying if the player declared hand is valid
+    boolean isValid = declareHand(player);
+    if(isValid){
+        return true;
+    }else{
+        return false;
+    }
+    
 }
 
 public void endRound(RummyPlayer player){
+    boolean isValid = verifyDeclaration(player);
+    if(isValid){
+        System.out.println(player.getName()+" has declard a valid hand");
+    }else{
+        System.out.println(player.getName() +" has delared a invalid hand");
+    }
     
 }
 
