@@ -72,8 +72,8 @@ public class TenCardRummyGame extends Game {
             System.out.println("PRESS 1 TO PICK FROM DECK");
             System.out.println("PRESS 2 TO PICK FROM DISCARD PILE");
 
-            int choice = scanner.nextInt();
-            switch (choice) {
+            int drawCardChoice = scanner.nextInt();
+            switch (drawCardChoice) {
                 case 1:
                     Card drawnFromDeck = drawCardFromDeck(currentPlayer);
                     if (drawnFromDeck != null) {
@@ -93,6 +93,65 @@ public class TenCardRummyGame extends Game {
             }
             //printHand(currentPlayer);
             arrangeCards(currentPlayer);
+            printSequences(currentPlayer);
+            System.out.println("Enter a Card to discard:");
+            System.out.println("Enter 1 to discard the First Card.");
+            System.out.println("Enter 2 to discard the Second Card.");
+            System.out.println("Enter 3 to discard the Third Card.");
+            System.out.println("Enter 4 to discard the Fourth Card.");
+            System.out.println("Enter 5 to discard the Fifth Card.");
+            System.out.println("Enter 6 to discard the Sixth Card.");
+            System.out.println("Enter 7 to discard the Seventh Card.");
+            System.out.println("Enter 8 to discard the Eighth Card.");
+            System.out.println("Enter 9 to discard the Ninth Card.");
+            System.out.println("Enter 10 to discard the Tenth Card.");
+            
+            int discardCardChoice = scanner.nextInt();
+            Card discardedCard = null;
+            switch(discardCardChoice){
+                case 1:
+                    discardedCard = currentPlayer.getHand().getCards().get(0);
+                    break;
+                case 2:
+                    discardedCard = currentPlayer.getHand().getCards().get(1);
+                    break;
+                case 3:
+                    discardedCard = currentPlayer.getHand().getCards().get(2);
+                    break;
+                case 4:
+                    discardedCard = currentPlayer.getHand().getCards().get(3);
+                    break;
+                case 5:
+                    discardedCard = currentPlayer.getHand().getCards().get(4);
+                    break;
+                case 6:
+                    discardedCard = currentPlayer.getHand().getCards().get(5);
+                    break;
+                case 7:
+                    discardedCard = currentPlayer.getHand().getCards().get(6);
+                    break;
+                case 8:
+                    discardedCard = currentPlayer.getHand().getCards().get(7);
+                    break;
+                case 9:
+                    discardedCard = currentPlayer.getHand().getCards().get(8);
+                    break;
+                case 10:
+                    discardedCard = currentPlayer.getHand().getCards().get(9);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 10.");
+        return;               
+                    
+            }
+            if(discardedCard != null){
+                currentPlayer.getHand().discardCard(discardedCard);
+                discardPile.getCards().add(0, discardedCard);
+                discardPile.setSize(discardPile.getSize()+1);
+                System.out.println(currentPlayer.getName() +" Discarded "+ discardedCard);
+            }else{
+                System.out.println("Failed to discard Card. Please try Again.");
+            }
 
         }
     }
@@ -106,8 +165,8 @@ public class TenCardRummyGame extends Game {
         }
         System.out.println("Deck Created");
         for (PlayingCard card : deck) {
-        System.out.println(card);
-        
+            System.out.println(card);
+
         }
         System.out.println(deck.size());
         return deck;
@@ -116,7 +175,7 @@ public class TenCardRummyGame extends Game {
 
     public void dealCards(RummyPlayer player1, RummyPlayer player2) {
         for (int i = 0; i < 20; i++) {
-            Card card = deck.getCards().remove (0);
+            Card card = deck.getCards().remove(0);
 
             if (i % 2 != 0) { // Odd index - deal to player1
                 player1.getHand().addCard(card);
