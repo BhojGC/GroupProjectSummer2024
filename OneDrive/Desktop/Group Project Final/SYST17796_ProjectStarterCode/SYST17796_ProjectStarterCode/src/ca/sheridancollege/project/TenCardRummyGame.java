@@ -47,8 +47,10 @@ public class TenCardRummyGame extends Game {
         arrangeCards(player2);
         evaluatePointsInHand(player2);
         
-        discardPile.getCards().add(deck.getCards().remove(0));
-        discardPile.setSize(discardPile.getSize()+1);
+Card topCard = this.deck.getCards().remove(0);
+this.discardPile.getCards().add(topCard);
+this.discardPile.setSize(1);
+System.out.println(discardPile.getCards().get(0));
 
     }
 
