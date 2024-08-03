@@ -91,7 +91,7 @@ public class TenCardRummyGame extends Game {
                     continue;
 
             }
-            //printHand(currentPlayer);
+            printHand(currentPlayer);
             arrangeCards(currentPlayer);
             printSequences(currentPlayer);
             System.out.println("Enter a Card to discard:");
@@ -152,6 +152,7 @@ public class TenCardRummyGame extends Game {
             }else{
                 System.out.println("Failed to discard Card. Please try Again.");
             }
+            turn = (turn+1)%2;
 
         }
     }
@@ -194,35 +195,36 @@ public class TenCardRummyGame extends Game {
             }
         }
     }
+    
+    private int calculatePoints(List<Card> cards) {
+    return cards.stream()
+            .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
+            .sum();
+}
 
     public int evaluatePointsInHand(RummyPlayer player) {
         Hand hand = player.getHand();
-
+        int pointsInHand =0;
         //checking for pure sequence
         List<Card> pureSequences = hand.getPureSequences();
-        boolean hasPureSequence = !pureSequences.isEmpty();
-        int pointsInHand = 0;
-
-        if (hasPureSequence == true) {
-            //checking for impure sequence
-            List<Card> impureSequences = hand.getImpureSequence();
-            pointsInHand = pureSequences.stream()
-                    .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
-                    .sum();
-            pointsInHand += impureSequences.stream()
-                    .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
-                    .sum();
-
-        } else {
+        if(!pureSequences.isEmpty()){
+            //subtract points from total point
+            pointsInHand -= calculatePoints(pureSequences);
+        }else{
             pointsInHand = 100;
         }
-        if (player == player1) {
+        
+        //update player points
+        if(player == player1){
             player1PointsInHand = pointsInHand;
-        } else if (player == player2) {
+        }else if(player == player2){
             player2PointsInHand = pointsInHand;
         }
-        System.out.println(player.getName() + " points in hand: " + pointsInHand);
+        System.out.println(player.getName()+" points in hand: "+ pointsInHand);
         return pointsInHand;
+        
+
+       
 
     }
 

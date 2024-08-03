@@ -162,7 +162,7 @@ private int getSequentialValue(Value value) {
         //find impuresequences within the sorted List
         List<Card> currentSequence = new ArrayList<>();
         for (Card card : allCards) {
-            if (currentSequence.isEmpty() || isConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+            if (currentSequence.isEmpty() || isImpureConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
                 currentSequence.add(card);
             } else {
                 //If sequence breaks, check if it is valid and reset
@@ -194,6 +194,44 @@ private int getSequentialValue(Value value) {
 
         return impureSequence;
     }
+    private boolean isImpureConsecutive(PlayingCard card1, PlayingCard card2) {
+    Value value1 = card1.getValue();
+    Value value2 = card2.getValue();
+
+    // Convert face cards to their sequential values
+    int seqValue1 = getSequentialValue(value1);
+    int seqValue2 = getSequentialValue(value2);
+
+    // Case where Ace is treated as "1"
+    if (seqValue1 == 1 && seqValue2 == 2){
+        return true;
+    }
+    //case where Ace is treated as 1 and checking consecutive with face cards
+    if(seqValue1 == 1 && seqValue2 ==14){
+        return true;
+    }
+    //Case where Ace is Treated as high after King
+    if(seqValue1 == 14 && seqValue2 == 1){
+        return true;
+    }
+    //case where Jack, Queen and King are treated as 11, 12, 13
+    if(seqValue1 == 11 && seqValue2 == 12){
+        return true;
+    }
+    if(seqValue1 == 12 && seqValue2 == 13){
+        return true;
+    }
+
+    if (seqValue1 == 13 && seqValue2 == 11) {
+        return true;
+    }
+    if(Math.abs(seqValue1 - seqValue2) == 1){
+        return true;
+    }
+    return false;
+
+    
+}
 
     /*public boolean isValidHand(){
     List<Card> pureSequences = getPureSequences();
