@@ -80,6 +80,13 @@ if (!player1PureSequences.isEmpty()) {
 } else {
     System.out.println("Player 1 does not have any pure sequences.");
 }
+// Check for impure Sequence in player 1's hand
+List<Card> player1ImpureSequence = players[0].getHand().getImpureSequence();
+if(!player1ImpureSequence.isEmpty()){
+    System.out.println("Player 1 has impure sequences: "+player1ImpureSequence);
+}else{
+    System.out.println("Player 1 does not have any impure Sequences.");
+}
 
 // Check for pure sequences in player 2's hand (if player 2 exists)
 if (numOfPlayers > 1) {
@@ -89,7 +96,17 @@ if (numOfPlayers > 1) {
     } else {
         System.out.println("Player 2 does not have any pure sequences.");
     }
+    
+    // Check for impure Sequence in player 2's hand
+List<Card> player2ImpureSequence = players[1].getHand().getImpureSequence();
+if(!player2ImpureSequence.isEmpty()){
+    System.out.println("Player 2 has impure sequences: "+player2ImpureSequence);
+}else{
+    System.out.println("Player 2 does not have any impure Sequences.");
 }
+}
+
+
     
  
 
