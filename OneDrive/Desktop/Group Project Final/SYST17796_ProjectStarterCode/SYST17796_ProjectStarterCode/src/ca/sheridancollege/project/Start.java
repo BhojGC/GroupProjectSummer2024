@@ -72,6 +72,10 @@ public class Start {
 TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
 
 rummyGame.dealCards(players[0], numOfPlayers > 1 ? players[1] : null);
+rummyGame.arrangeCards(players[0]);
+if(numOfPlayers >1){
+    rummyGame.arrangeCards(players[1]);
+}
 
 // Check for pure sequences in player 1's hand
 List<Card> player1PureSequences = players[0].getHand().getPureSequences();

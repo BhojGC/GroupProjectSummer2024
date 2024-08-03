@@ -5,7 +5,9 @@
 package ca.sheridancollege.project;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -39,6 +41,10 @@ public class TenCardRummyGame extends Game{
         this.player2 = new RummyPlayer("player2");
         
         dealCards(player1, player2);
+        arrangeCards(player1);
+        arrangeCards(player2);
+        
+        
     
     
 }
@@ -64,16 +70,16 @@ public void dealCards(RummyPlayer player1, RummyPlayer player2) {
 
             if (i % 2 != 0) { // Odd index - deal to player1
                 player1.getHand().addCard(card);
-                System.out.println("Player 1 Hand");
-                for(Card c : player1.getHand().getCards()){
-                    System.out.println(c);
-                }
+                //System.out.println("Player 1 Hand");
+                //for(Card c : player1.getHand().getCards()){
+                   // System.out.println(c);
+                //}
             } else { // Even index - deal to player2
                 player2.getHand().addCard(card);
-                System.out.println("Player 2 Hand");
-                for(Card cd : player2.getHand().getCards()){
-                    System.out.println(cd);
-                }
+                //System.out.println("Player 2 Hand");
+                //for(Card cd : player2.getHand().getCards()){
+                  //  System.out.println(cd);
+                //}
             }
         }
     }
@@ -174,7 +180,24 @@ public void declareWinner(){
     public void setPlayer2pointsInHand(int player2PointsInHand) {
         this.player2PointsInHand = player2PointsInHand;
     }
+    
+    public void arrangeCards(RummyPlayer player){
+    Hand hand = player.getHand();
+    //sort cards by siut first, then by value
+    hand.getCards().sort(Comparator
+                .comparing((Card card)->((PlayingCard) card).getSuit())
+                .thenComparing(card -> ((PlayingCard) card).getValue().getPoints())
+    );
+    //collecting the sorted cards in a list
+    List<String> sortedCards = hand.getCards().stream()
+            .map(card -> card.toString())
+            .collect(Collectors.toList());
+    
+    //printing the sorted cards Array
+    System.out.println(player.getName()+"\n"+sortedCards);
+    }
+}
 
 
     
-}
+
