@@ -101,10 +101,13 @@ private void addValidSequence(List<Card> pureSequences, List<Card> sequence) {
 
 public List<Card> getImpureSequence(){
     List <Card> impureSequence = new ArrayList<>();
-    List<Card> allCards = getCards().stream()
+    List<Card> allCards = getCards()
+            .stream()
             .map(card ->(PlayingCard) card).collect(Collectors.toList());
     //Sorting all cards regardless of suit
-    allCards.sort(Comparator.comparingInt(card -> ((PlayingCard)card).getValue().getPoints()));
+    allCards.sort(Comparator.comparingInt(card -> ((PlayingCard)card)
+            .getValue()
+            .getPoints()));
     //find impuresequences within the sorted List
     List<Card> currentSequence = new ArrayList<>();
     for(Card card: allCards){
@@ -126,11 +129,11 @@ public List<Card> getImpureSequence(){
     }
     
     //Checking the cards with same value irrespective of suit
-    Map<CardValue, List<PlayingCard>> cardsByValue = allCards.stream()
+    Map<Value, List<PlayingCard>> cardsByValue = allCards.stream()
             .map(card -> (PlayingCard) card)
             .collect(Collectors.groupingBy(PlayingCard::getValue));
     
-    for(Map.Entry<CardValue, List<PlayingCard>> entry : cardsByValue.entrySet()){
+    for(Map.Entry<Value, List<PlayingCard>> entry : cardsByValue.entrySet()){
         List<PlayingCard> sameValueCards = entry.getValue();
         
         if(sameValueCards.size() >=3){
