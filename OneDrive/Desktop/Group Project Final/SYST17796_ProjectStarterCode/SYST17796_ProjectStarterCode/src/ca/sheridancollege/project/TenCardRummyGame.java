@@ -43,7 +43,9 @@ public class TenCardRummyGame extends Game {
 
         dealCards(player1, player2);
         arrangeCards(player1);
+        evaluatePointsInHand(player1);
         arrangeCards(player2);
+        evaluatePointsInHand(player2);
 
     }
 
@@ -68,12 +70,14 @@ public class TenCardRummyGame extends Game {
 
             if (i % 2 != 0) { // Odd index - deal to player1
                 player1.getHand().addCard(card);
+                
                 //System.out.println("Player 1 Hand");
                 //for(Card c : player1.getHand().getCards()){
                 // System.out.println(c);
                 //}
             } else { // Even index - deal to player2
                 player2.getHand().addCard(card);
+                
                 //System.out.println("Player 2 Hand");
                 //for(Card cd : player2.getHand().getCards()){
                 //  System.out.println(cd);
@@ -82,38 +86,39 @@ public class TenCardRummyGame extends Game {
         }
     }
 
-    private void evaludatePointsInHand(RummyPlayer player) {
+    public int evaluatePointsInHand(RummyPlayer player) {
         Hand hand = player.getHand();
 
         //checking for pure sequence
         List<Card> pureSequences = hand.getPureSequences();
         boolean hasPureSequence = !pureSequences.isEmpty();
+        int pointsInHand = 0;
 
         if (hasPureSequence == true) {
             //checking for impure sequence
             List<Card> impureSequences = hand.getImpureSequence();
-            int pointsInHand = pureSequences.stream()
+            pointsInHand = pureSequences.stream()
                     .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
                     .sum();
             pointsInHand += impureSequences.stream()
                     .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
                     .sum();
-            if (player == player1) {
+            
+        } else {
+            pointsInHand =100;
+        }
+        if (player == player1) {
                 player1PointsInHand = pointsInHand;
             } else if (player == player2) {
                 player2PointsInHand = pointsInHand;
             }
-        } else {
-            if (player == player1) {
-                player1PointsInHand = 100;
-            } else if (player == player2) {
-                player2PointsInHand = 100;
-            }
-        }
+        System.out.println(player.getName()+" points in hand: "+pointsInHand);
+        return pointsInHand;
+        
 
     }
     
-     public Card drawCardFromDiscardPile(GroupOfCards discardPile) {
+     public Card drawCardFromDiscardPile() {
         if (discardPile.getSize() > 0) {
             Card drawnCard = discardPile.getCards().remove(0);
             discardPile.setSize(discardPile.getSize() - 1);
@@ -124,7 +129,7 @@ public class TenCardRummyGame extends Game {
         }
     }
 
-    public Card drawCardFromDeck(GroupOfCards deck) {
+    public Card drawCardFromDeck() {
         if (deck.getSize() > 0) {
             Card drawnCard = deck.getCards().remove(0);
             deck.setSize(deck.getSize() - 1);

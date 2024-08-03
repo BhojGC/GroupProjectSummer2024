@@ -74,9 +74,15 @@ public class Start {
         if (numOfPlayers > 1) {
             rummyGame.arrangeCards(players[1]);
         }
+        int player1PointsInHand = rummyGame.evaluatePointsInHand(players[0]);
+        System.out.println("Player 1 Points in hand: "+player1PointsInHand);
+        if(numOfPlayers >1){
+           int player2PointsInHand =  rummyGame.evaluatePointsInHand(players[1]);
+           System.out.println("Player 2 Points in hand: "+ player2PointsInHand);
+        }
         //Drawing a card from the deck for player 1
         Card player1DrawnCard = rummyGame.drawCardFromDeck();
-        if(player1DrawCard != null){
+        if(player1DrawnCard != null){
             players[0].getHand().addCard(player1DrawnCard);
             System.out.println("Player 1 drew from the deck: "+ player1DrawnCard);
         }
