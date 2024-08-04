@@ -71,6 +71,8 @@ public class TenCardRummyGame extends Game {
             System.out.println("Player " + (turn + 1) + " Turn:");
             printHand(currentPlayer);
             printSequences(currentPlayer);
+            arrangeCards(currentPlayer);
+            evaluatePointsInHand(currentPlayer);
             System.out.println("PRESS 1 TO PICK FROM DECK");
             System.out.println("PRESS 2 TO PICK FROM DISCARD PILE");
 
