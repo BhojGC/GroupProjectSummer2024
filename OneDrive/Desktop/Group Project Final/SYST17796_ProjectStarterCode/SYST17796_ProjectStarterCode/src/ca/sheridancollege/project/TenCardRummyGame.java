@@ -69,6 +69,8 @@ public class TenCardRummyGame extends Game {
         while (gameOnGoing) {
             RummyPlayer currentPlayer = (turn == 0) ? player1 : player2;
             System.out.println("Player " + (turn + 1) + " Turn:");
+            printHand(currentPlayer);
+            printSequences(currentPlayer);
             System.out.println("PRESS 1 TO PICK FROM DECK");
             System.out.println("PRESS 2 TO PICK FROM DISCARD PILE");
 
@@ -93,6 +95,7 @@ public class TenCardRummyGame extends Game {
             }
             printHand(currentPlayer);
             arrangeCards(currentPlayer);
+            evaluatePointsInHand(currentPlayer);
             printSequences(currentPlayer);
             System.out.println("Enter a Card to discard:");
             System.out.println("Enter 1 to discard the First Card.");
@@ -209,7 +212,7 @@ public class TenCardRummyGame extends Game {
         List<Card> pureSequences = hand.getPureSequences();
         if(!pureSequences.isEmpty()){
             //subtract points from total point
-            pointsInHand -= calculatePoints(pureSequences);
+            pointsInHand = 100 - calculatePoints(pureSequences);
         }else{
             pointsInHand = 100;
         }
