@@ -282,7 +282,7 @@ public class TenCardRummyGame extends Game {
             System.out.println();
         } else {
             System.out.println(player.getName() + " Impure Sequences: ");
-            for (Card sequence : pureSequence) {
+            for (Card sequence : impureSequence) {
                 System.out.println(sequence);
             }
         }
