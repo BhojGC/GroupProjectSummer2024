@@ -194,76 +194,27 @@ public class Hand extends GroupOfCards {
         return impureSequence.stream().distinct().collect(Collectors.toList());
     }
 
-    private boolean isPureSequence(List<Card> sequence) {
-        Suit suit = ((PlayingCard) sequence.get(0)).getSuit();
-        for (Card card : sequence) {
-            if (((PlayingCard) card).getSuit() != suit) {
-                return false;
-            }
-        }
-        return true;
-    }
+public boolean isValidHand() {
+    List<Card> pureCards = getPureSequences(); // This should return List<Card>
+    List<Card> impureCards = getImpureSequence(); // This should return List<Card>
 
-    private boolean isImpureConsecutive(PlayingCard card1, PlayingCard card2) {
-        Value value1 = card1.getValue();
-        Value value2 = card2.getValue();
+    // Check for at least one pure sequence of 3 or 4 cards
+    boolean hasPureSequence = pureCards.size() >= 3 && pureCards.size() <= 4;
 
-        // Convert face cards to their sequential values
-        int seqValue1 = getSequentialValue(value1);
-        int seqValue2 = getSequentialValue(value2);
-           if (Math.abs(seqValue1 - seqValue2) == 1) {
-            return true;
-        }
+    // Check for at least one impure sequence of 3 or 4 cards
+    boolean hasFirstImpureSequence = impureCards.size() >= 3 && impureCards.size() <= 4;
 
-        // Case where Ace is treated as "1"
-        if (seqValue1 == 1 && seqValue2 == 2) {
-            return true;
-        }
-        //case where Ace is treated as 1 and checking consecutive with face cards
-        if (seqValue1 == 1 && seqValue2 == 14) {
-            return true;
-        }
-        //Case where Ace is Treated as high after King
-        if (seqValue1 == 14 && seqValue2 == 1) {
-            return true;
-        }
-        //case where Jack, Queen and King are treated as 11, 12, 13
-        if (seqValue1 == 11 && seqValue2 == 12) {
-            return true;
-        }
-        if (seqValue1 == 12 && seqValue2 == 13) {
-            return true;
-        }
+    // Check for at least one additional impure sequence of exactly 3 cards
+    boolean hasSecondImpureSequence = impureCards.size() == 3;
 
-        if (seqValue1 == 13 && seqValue2 == 11) {
-            return true;
-        }
-     
-        return false;
-
-    }
-
-    public boolean isValidHand(){
-    List<Card> pureSequences = getPureSequences();
-    List<Card> impureSequences = getImpureSequence();
-    
-    // checking for at leat one pure sequence
-    
-    boolean hasPureSequence = !pureSequences.isEmpty() || pureSequences.size() >= 4;
-    
-    boolean hasFirstImpureSequence = !impureSequences.isEmpty() || impureSequences.size() >= 4;
-    boolean hasSecondImpureSequence = !impureSequences.isEmpty() || impureSequences.size() >= 4;
-    
-    
-   /* //chcking for at least two sequences (either pure or impure)
-    boolean hasAtleastTwoSequences = (pureSequences.size() >=3 && impureSequences.size() >=3) ||
-                                                            (pureSequences.size() >=6) || (impureSequences.size() >=6);
-    
-    boolean hasAtleastTwoSequences = for(getImpureSequence() impure: hand.)
-    
-    // A valid hand must have at least one pure sequence and at least one additional sequence (pure or impure)*/
-    return hasPureSequence && hasFirstImpureSequence &&hasSecondImpureSequence;
+    // A valid hand must have:
+    // - At least one pure sequence of 3 or 4 cards
+    // - At least one impure sequence of 3 or 4 cards
+    // - At least one additional impure sequence of exactly 3 cards
+    return hasPureSequence && hasFirstImpureSequence && hasSecondImpureSequence;
 }
+
+
      /*
     public boolean isValidHand() {
         List<Card> pureSequences = getPureSequences();

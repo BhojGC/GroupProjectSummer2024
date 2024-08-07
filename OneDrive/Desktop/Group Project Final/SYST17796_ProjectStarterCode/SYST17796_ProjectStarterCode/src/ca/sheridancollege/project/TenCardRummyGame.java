@@ -101,8 +101,12 @@ public class TenCardRummyGame extends Game {
     public void dealCards() {
         for (int i = 0; i < 20; i++) {
             Card card = deck.getCards().remove(0);
-            RummyPlayer currentPlayer = players.get(i % players.size());
-            currentPlayer.getHand().addCard(card);
+
+            if (i % 2 != 0) { // Odd index - deal to player1
+                players.get(0).getHand().addCard(card);
+            } else { // Even index - deal to player2
+                players.get(1).getHand().addCard(card);
+            }
         }
     }
 
@@ -254,9 +258,9 @@ public class TenCardRummyGame extends Game {
         //verifying if the player declared hand is valid
         boolean isValid = declareHand(player);
         if (isValid) {
-           System.out.println(player.getName()+" has Declared a valid hand.");
+            System.out.println(player.getName() + " has Declared a valid hand.");
         } else {
-           System.out.println(player.getName()+" has Declared a Invalid hand.");
+            System.out.println(player.getName() + " has Declared a Invalid hand.");
         }
         return isValid;
 
