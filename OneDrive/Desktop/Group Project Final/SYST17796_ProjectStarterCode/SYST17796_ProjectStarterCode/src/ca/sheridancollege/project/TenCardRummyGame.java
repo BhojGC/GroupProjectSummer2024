@@ -79,6 +79,7 @@ public class TenCardRummyGame extends Game {
                     gameOnGoing = false;
 
                 }
+                
 
             }
 
@@ -194,6 +195,8 @@ public class TenCardRummyGame extends Game {
         System.out.println(player.getName() + " points in hand: " + pointsInHand);
         return pointsInHand;
     }
+    
+   
 
     public Card drawCardFromDiscardPile() {
         if (discardPile.getSize() > 0) {
