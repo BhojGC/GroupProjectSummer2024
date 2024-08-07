@@ -39,39 +39,37 @@ public class Hand extends GroupOfCards {
      * @return a list of cards that form pure sequences
      */
     public List<Card> getPureSequences() {
-        List<Card> pureSequences = new ArrayList<>();
+    List<Card> pureSequences = new ArrayList<>();
 
-        // Group cards by suit
-        Map<Suit, List<PlayingCard>> cardsBySuit = getCards().stream()
-                .map(card -> (PlayingCard) card)
-                .collect(Collectors.groupingBy(PlayingCard::getSuit));
+    // Group cards by suit
+    Map<Suit, List<PlayingCard>> cardsBySuit = getCards().stream()
+            .map(card -> (PlayingCard) card)
+            .collect(Collectors.groupingBy(PlayingCard::getSuit));
 
-        // Iterate through each suit to find sequences
-        for (Map.Entry<Suit, List<PlayingCard>> entry : cardsBySuit.entrySet()) {
-            List<PlayingCard> suitCards = entry.getValue();
+    // Iterate through each suit to find sequences
+    for (List<PlayingCard> suitCards : cardsBySuit.values()) {
+        // Sort the cards in ascending order by their value
+        suitCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card).getValue().getPoints()));
 
-            // Sort the cards in ascending order by their value
-            suitCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card).getValue().getPoints()));
-
-            // Find sequences within the sorted list
-            List<Card> currentSequence = new ArrayList<>();
-            for (Card card : suitCards) {
-                if (currentSequence.isEmpty() || isConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
-                    currentSequence.add(card);
-                } else {
-                    // If sequence breaks, check if it is valid and reset
-                    addValidSequence(pureSequences, currentSequence);
-                    currentSequence.clear();
-                    currentSequence.add(card);
-                }
+        // Find sequences within the sorted list
+        List<Card> currentSequence = new ArrayList<>();
+        for (Card card : suitCards) {
+            if (currentSequence.isEmpty() || isConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+                currentSequence.add(card);
+            } else {
+                // If sequence breaks, check if it is valid and reset
+                addValidSequence(pureSequences, currentSequence);
+                currentSequence = new ArrayList<>();
+                currentSequence.add(card);
             }
-
-            // Check the last sequence
-            addValidSequence(pureSequences, currentSequence);
         }
-
-        return pureSequences.stream().distinct().collect(Collectors.toList());
+        // Check the last sequence
+        addValidSequence(pureSequences, currentSequence);
     }
+
+    return pureSequences.stream().distinct().collect(Collectors.toList());
+}
+
 
     /**
      * Checks if two cards are consecutive.
@@ -154,38 +152,35 @@ public class Hand extends GroupOfCards {
                 .stream()
                 .map(card -> (PlayingCard) card)
                 .collect(Collectors.toList());
-        //Sorting all cards regardless of suit
-        allCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card)
-                .getValue()
-                .getPoints()));
-        //find impuresequences within the sorted List
+
+        // Sort all cards regardless of suit
+        allCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card).getValue().getPoints()));
+
+        // Find impure sequences within the sorted list
         List<Card> currentSequence = new ArrayList<>();
         for (Card card : allCards) {
             if (currentSequence.isEmpty() || isImpureConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
                 currentSequence.add(card);
             } else {
-                //If sequence breaks, check if it is valid and reset
-
+                // If sequence breaks, check if it is valid and reset
                 if (currentSequence.size() >= 3 && !isPureSequence(currentSequence)) {
                     impureSequence.addAll(currentSequence);
                 }
-                currentSequence.clear();
+                currentSequence = new ArrayList<>();
                 currentSequence.add(card);
             }
         }
-        // check the last sequence
+        // Check the last sequence
         if (currentSequence.size() >= 3 && !isPureSequence(currentSequence)) {
             impureSequence.addAll(currentSequence);
         }
 
-        //Checking the cards with same value irrespective of suit
+        // Check cards with the same value irrespective of suit
         Map<Value, List<PlayingCard>> cardsByValue = allCards.stream()
                 .map(card -> (PlayingCard) card)
                 .collect(Collectors.groupingBy(PlayingCard::getValue));
 
-        for (Map.Entry<Value, List<PlayingCard>> entry : cardsByValue.entrySet()) {
-            List<PlayingCard> sameValueCards = entry.getValue();
-
+        for (List<PlayingCard> sameValueCards : cardsByValue.values()) {
             if (sameValueCards.size() >= 3) {
                 impureSequence.addAll(sameValueCards);
             }
@@ -211,6 +206,8 @@ public class Hand extends GroupOfCards {
         // Convert face cards to their sequential values
         int seqValue1 = getSequentialValue(value1);
         int seqValue2 = getSequentialValue(value2);
+
+        // General case to check if the cards are numerically consecutive
         if (Math.abs(seqValue1 - seqValue2) == 1) {
             return true;
         }
@@ -219,28 +216,16 @@ public class Hand extends GroupOfCards {
         if (seqValue1 == 1 && seqValue2 == 2) {
             return true;
         }
-        //case where Ace is treated as 1 and checking consecutive with face cards
-        if (seqValue1 == 1 && seqValue2 == 14) {
-            return true;
-        }
-        //Case where Ace is Treated as high after King
-        if (seqValue1 == 14 && seqValue2 == 1) {
-            return true;
-        }
-        //case where Jack, Queen and King are treated as 11, 12, 13
-        if (seqValue1 == 11 && seqValue2 == 12) {
-            return true;
-        }
-        if (seqValue1 == 12 && seqValue2 == 13) {
+
+        // Case where Ace is treated as high after King
+        if (seqValue1 == 13 && seqValue2 == 1) {
             return true;
         }
 
-        if (seqValue1 == 13 && seqValue2 == 11) {
-            return true;
-        }
-
-        return false;
-
+        // Case where face cards are treated as consecutive
+        return (seqValue1 == 11 && seqValue2 == 12)
+                || (seqValue1 == 12 && seqValue2 == 13)
+                || (seqValue1 == 13 && seqValue2 == 11);
     }
 
     public boolean isValidHand() {
