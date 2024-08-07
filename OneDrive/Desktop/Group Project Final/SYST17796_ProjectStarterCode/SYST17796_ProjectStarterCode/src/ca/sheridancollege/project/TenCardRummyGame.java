@@ -145,11 +145,13 @@ public class TenCardRummyGame extends Game {
                 if (drawnFromDeck != null) {
                     player.getHand().addCard(drawnFromDeck);
                 }
+                break;
             case 2:
                 Card drawnFromPile = drawCardFromDiscardPile();
                 if (drawnFromPile != null) {
                     player.getHand().addCard(drawnFromPile);
                 }
+                break;
             default:
                 System.out.println("Invalid Choice. Try again");
 
