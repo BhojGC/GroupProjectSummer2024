@@ -159,29 +159,28 @@ public class TenCardRummyGame extends Game {
             } else {
                 System.out.println("Failed to discard Card. Please try Again.");
             }
-            if (declareHand(currentPlayer) == true) {
-                System.out.println(currentPlayer.getName() + " has 1 pure and 3 impure sequences\n Would you like to declare.");
-                System.out.println("Enter D to declare.");
-                String userIput = scanner.next();
-                if ("D".equalsIgnoreCase(userIput)) {
-                    System.out.println(currentPlayer.getName() + " has declared.");
-                     verifyDeclaration(currentPlayer);
-                     calculateTotalPoints();
-                     endRound(currentPlayer);
-                     declareWinner();
-                     gameOnGoing = false;
-                      
-                     
-                }else{
-                    System.out.println("Decleration canceled. Continuing with the game");
-                }
-
+           boolean haspureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
+           boolean impureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
+           System.out.println(currentPlayer.getName()+" has a Valid hand to Declare.");
+           System.out.println("Enter 'D' to Declare");
+           String declarationInput = scanner.next();
+           if("D".equalsIgnoreCase(declarationInput)){
+               declareHand(currentPlayer);
+               verifyDeclaration(currentPlayer);
+               calculateTotalPoints();
+               declareWinner();
+               
+               
+               
+               
+           }
+            
             }
 
             turn = (turn + 1) % 2;
 
         }
-    }
+    
 
     public ArrayList<PlayingCard> createDeck() {
         ArrayList<PlayingCard> deck = new ArrayList<>();
