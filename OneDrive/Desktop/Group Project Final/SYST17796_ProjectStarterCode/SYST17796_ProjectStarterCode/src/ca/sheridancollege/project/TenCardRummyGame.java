@@ -240,7 +240,7 @@ public class TenCardRummyGame extends Game {
 
     public int evaluatePointsInHand(RummyPlayer player) {
         Hand hand = player.getHand();
-        int pointsInHand = 0; // Default points if no sequences are found
+        int pointsInHand = 100; // Default points if no sequences are found
 
         List<Card> pureSequences = hand.getPureSequences();
         List<Card> impureSequences = hand.getImpureSequence();

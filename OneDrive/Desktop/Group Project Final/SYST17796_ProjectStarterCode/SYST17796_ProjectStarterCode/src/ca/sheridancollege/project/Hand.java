@@ -260,20 +260,27 @@ public class Hand extends GroupOfCards {
 }
      */
     public boolean isValidHand() {
-        List<Card> pureSequences = getPureSequences();
-        List<Card> impureSequences = getImpureSequence();
+    List<Card> pureSequences = getPureSequences();
+    List<Card> impureSequences = getImpureSequence();
+    
 
-        //checking for at least one pure sequence
-        boolean hasPureSequence = !pureSequences.isEmpty();
+    // Check if there is at least one pure sequence
+    boolean hasPureSequence = !pureSequences.isEmpty();
 
-        //checking if at least one valid additional sequence
-        boolean hasAdditionalSequence = (pureSequences.size() >= 4 || impureSequences.isEmpty() || impureSequences.size() >= 3);
+    // Check if there is at least one valid additional sequence or a valid group of cards
+    boolean hasValidAdditionalSequence = !impureSequences.isEmpty() || !cardGroups.isEmpty();
 
-        //check if there is at least one valid additional sequence(pure sequence or impure sequence or group of 3 value cards
-        boolean hasAdditionalValidSequence = hasPureSequence || !impureSequences.isEmpty() || impureSequences.size() >= 3;
+    // Check if there is at least one valid pure sequence and either:
+    // - One pure sequence and either (4 cards in a pure sequence or a valid impure sequence or group of cards)
+    // - OR at least one impure sequence or a group of cards
+    boolean hasValidHand = hasPureSequence && (
+        (pureSequences.size() >= 4 && hasValidAdditionalSequence) ||
+        hasValidAdditionalSequence
+    );
 
-        return hasPureSequence && hasAdditionalSequence && hasAdditionalValidSequence;
-    }
+    return hasValidHand;
+}
+
 
     @Override
     public String toString() {
