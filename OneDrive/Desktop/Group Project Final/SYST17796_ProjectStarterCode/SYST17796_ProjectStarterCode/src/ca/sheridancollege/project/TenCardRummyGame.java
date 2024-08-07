@@ -239,28 +239,40 @@ public class TenCardRummyGame extends Game {
     }
 
     public int evaluatePointsInHand(RummyPlayer player) {
-        Hand hand = player.getHand();
-        int pointsInHand = 100; // Default points if no sequences are found
+    Hand hand = player.getHand();
+    int pointsInHand = 0; // Start with 0 points
 
-        List<Card> pureSequences = hand.getPureSequences();
-        List<Card> impureSequences = hand.getImpureSequence();
+    List<Card> pureSequences = hand.getPureSequences();
+    List<Card> impureSequences = hand.getImpureSequence();
 
-        if (!pureSequences.isEmpty()) {
-            pointsInHand -= calculatePoints(pureSequences);
-            if (!impureSequences.isEmpty()) {
-                pointsInHand -= calculatePoints(impureSequences);
-            }
-        }
-
-        if (player == player1) {
-            player1PointsInHand = pointsInHand;
-        } else if (player == player2) {
-            player2PointsInHand = pointsInHand;
-        }
-
-        System.out.println(player.getName() + " points in hand: " + pointsInHand);
-        return pointsInHand;
+    // Calculate points for pure sequences
+    for (Card card : pureSequences) {
+        pointsInHand -= card.getPoints(); // Subtract points for pure sequences
     }
+
+    // Calculate points for impure sequences
+    for (Card card : impureSequences) {
+        pointsInHand -= card.getPoints(); // Subtract points for impure sequences
+    }
+
+    // Calculate points for remaining cards (those not in sequences)
+    List<Card> remainingCards = new ArrayList<>(hand.getCards());
+    remainingCards.removeAll(pureSequences);
+    remainingCards.removeAll(impureSequences);
+    for (Card card : remainingCards) {
+        pointsInHand += card.getPoints(); // Add points for remaining cards
+    }
+
+    if (player == player1) {
+        player1PointsInHand = pointsInHand;
+    } else if (player == player2) {
+        player2PointsInHand = pointsInHand;
+    }
+
+    System.out.println(player.getName() + " points in hand: " + pointsInHand);
+    return pointsInHand;
+}
+
 
     public Card drawCardFromDiscardPile() {
         if (discardPile.getSize() > 0) {
