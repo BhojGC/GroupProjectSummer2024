@@ -109,7 +109,7 @@ public class TenCardRummyGame extends Game {
     public void arrangeAndEvaluateHand(RummyPlayer player, int playerIndex) {
         arrangeCards(player);
         evaluatePointsInHand(player, playerIndex);
-        prntSequences(player);
+        printSequences(player);
     }
 
     private int calculatePoints(List<Card> cards) {
