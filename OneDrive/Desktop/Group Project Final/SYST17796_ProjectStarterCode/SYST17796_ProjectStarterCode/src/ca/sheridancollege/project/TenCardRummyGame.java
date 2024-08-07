@@ -110,10 +110,10 @@ public class TenCardRummyGame extends Game {
             System.out.println("Enter 8 to discard the Eighth Card.");
             System.out.println("Enter 9 to discard the Ninth Card.");
             System.out.println("Enter 10 to discard the Tenth Card.");
-            
+
             int discardCardChoice = scanner.nextInt();
             Card discardedCard = null;
-            switch(discardCardChoice){
+            switch (discardCardChoice) {
                 case 1:
                     discardedCard = currentPlayer.getHand().getCards().get(0);
                     break;
@@ -144,39 +144,44 @@ public class TenCardRummyGame extends Game {
                 case 10:
                     discardedCard = currentPlayer.getHand().getCards().get(9);
                     break;
+                case 11:
+                    discardedCard = currentPlayer.getHand().getCards().get(10);
                 default:
-                    System.out.println("Invalid choice. Please enter a number between 1 and 10.");
-        return;               
-                    
+                    System.out.println("Invalid choice. Please enter a number between 1 and 11.");
+                    return;
+
             }
-            if(discardedCard != null){
+            if (discardedCard != null) {
                 currentPlayer.getHand().discardCard(discardedCard);
                 discardPile.getCards().add(0, discardedCard);
-                discardPile.setSize(discardPile.getSize()+1);
-                System.out.println(currentPlayer.getName() +" Discarded "+ discardedCard);
-            }else{
+                discardPile.setSize(discardPile.getSize() + 1);
+                System.out.println(currentPlayer.getName() + " Discarded " + discardedCard);
+            } else {
                 System.out.println("Failed to discard Card. Please try Again.");
             }
-            if(verifyDeclaration(currentPlayer)){
-                
-                    System.out.println(currentPlayer.getName()+" have 1 Pure Sequence and 3 additional sequenes\n "
-                            + "Would you  like to Decalare the Game\n Enter D to declare the game");
-                    String userInput = scanner.next();
-                    
-                    if("D".equalsIgnoreCase(userInput)){
-                        System.out.println(currentPlayer.getName()+" had Declared.");
-                        calculateTotalPoints(currentPlayer);
-                    }
-                
+            if (declareHand(currentPlayer) == true) {
+                System.out.println(currentPlayer.getName() + " has 1 pure and 3 impure sequences\n Would you like to declare.");
+                System.out.println("Enter D to declare.");
+                String userIput = scanner.next();
+                if ("D".equalsIgnoreCase(userIput)) {
+                    System.out.println(currentPlayer.getName() + " has declared.");
+                     verifyDeclaration(currentPlayer);
+                     calculateTotalPoints();
+                     endRound(currentPlayer);
+                     declareWinner();
+                     gameOnGoing = false;
+                      
+                     
+                }else{
+                    System.out.println("Decleration canceled. Continuing with the game");
+                }
+
             }
-            
-            
-            turn = (turn+1)%2;
+
+            turn = (turn + 1) % 2;
 
         }
     }
-    
-    
 
     public ArrayList<PlayingCard> createDeck() {
         ArrayList<PlayingCard> deck = new ArrayList<>();
@@ -216,23 +221,22 @@ public class TenCardRummyGame extends Game {
             }
         }
     }
-    
-    private int calculatePoints(List<Card> cards) {
-    return cards.stream()
-            .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
-            .sum();
-}
-    public void calculateTotalPoints(RummyPlayer player) {
-    // Calculate total points for Player 1
-    player1totalPoints = player1totalPoints + player1PointsInHand;
-    System.out.println(player1.getName() + " Total Points: " + player1totalPoints);
 
-    // Calculate total points for Player 2
-    player2totalPoints = player2totalPoints + player2PointsInHand;
-    System.out.println(player2.getName() + " Total Points: " + player2totalPoints);
-}
-    
-    
+    private int calculatePoints(List<Card> cards) {
+        return cards.stream()
+                .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
+                .sum();
+    }
+
+    public void calculateTotalPoints() {
+        // Calculate total points for Player 1
+        player1totalPoints = player1totalPoints + player1PointsInHand;
+        System.out.println(player1.getName() + " Total Points: " + player1totalPoints);
+
+        // Calculate total points for Player 2
+        player2totalPoints = player2totalPoints + player2PointsInHand;
+        System.out.println(player2.getName() + " Total Points: " + player2totalPoints);
+    }
 
     public int evaluatePointsInHand(RummyPlayer player) {
         Hand hand = player.getHand();
@@ -342,6 +346,13 @@ public class TenCardRummyGame extends Game {
 
     @Override
     public void declareWinner() {
+        if (player1totalPoints < player2totalPoints) {
+            System.out.println(player1.getName() + " wins with " + player1totalPoints + " points!");
+        } else if (player2totalPoints < player1totalPoints) {
+            System.out.println(player2.getName() + " wins with " + player2totalPoints + " points!");
+        } else {
+            System.out.println("It's a tie! Both players have " + player1totalPoints + " points!");
+        }
 
     }
 

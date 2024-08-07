@@ -70,7 +70,7 @@ public class Hand extends GroupOfCards {
             addValidSequence(pureSequences, currentSequence);
         }
 
-        return pureSequences;
+        return pureSequences.stream().distinct().collect(Collectors.toList());
     }
 
     /**
@@ -191,7 +191,7 @@ public class Hand extends GroupOfCards {
             }
         }
 
-        return impureSequence;
+        return impureSequence.stream().distinct().collect(Collectors.toList());
     }
 
     private boolean isPureSequence(List<Card> sequence) {
@@ -211,6 +211,9 @@ public class Hand extends GroupOfCards {
         // Convert face cards to their sequential values
         int seqValue1 = getSequentialValue(value1);
         int seqValue2 = getSequentialValue(value2);
+           if (Math.abs(seqValue1 - seqValue2) == 1) {
+            return true;
+        }
 
         // Case where Ace is treated as "1"
         if (seqValue1 == 1 && seqValue2 == 2) {
@@ -235,9 +238,7 @@ public class Hand extends GroupOfCards {
         if (seqValue1 == 13 && seqValue2 == 11) {
             return true;
         }
-        if (Math.abs(seqValue1 - seqValue2) == 1) {
-            return true;
-        }
+     
         return false;
 
     }
