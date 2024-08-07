@@ -110,6 +110,7 @@ public class TenCardRummyGame extends Game {
             System.out.println("Enter 8 to discard the Eighth Card.");
             System.out.println("Enter 9 to discard the Ninth Card.");
             System.out.println("Enter 10 to discard the Tenth Card.");
+            System.out.println("Enter 11 to discard the Eleventh Card.");
 
             int discardCardChoice = scanner.nextInt();
             Card discardedCard = null;
@@ -146,6 +147,7 @@ public class TenCardRummyGame extends Game {
                     break;
                 case 11:
                     discardedCard = currentPlayer.getHand().getCards().get(10);
+                    break;
                 default:
                     System.out.println("Invalid choice. Please enter a number between 1 and 11.");
                     return;
@@ -159,28 +161,28 @@ public class TenCardRummyGame extends Game {
             } else {
                 System.out.println("Failed to discard Card. Please try Again.");
             }
-           boolean haspureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
-           boolean impureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
-           System.out.println(currentPlayer.getName()+" has a Valid hand to Declare.");
-           System.out.println("Enter 'D' to Declare");
-           String declarationInput = scanner.next();
-           if("D".equalsIgnoreCase(declarationInput)){
-               declareHand(currentPlayer);
-               verifyDeclaration(currentPlayer);
-               calculateTotalPoints();
-               declareWinner();
-               
-               
-               
-               
-           }
-            
+            boolean hasPureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
+            boolean hasImpureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
+
+            if (hasPureSequence && hasImpureSequence) {
+                System.out.println(currentPlayer.getName() + " has a valid hand.");
+                System.out.println("Enter 'D' to Declare.");
+                String declareInput = scanner.next();
+                if ("D".equalsIgnoreCase(declareInput)) {
+                    declareHand(currentPlayer);
+                    verifyDeclaration(currentPlayer);
+                    calculateTotalPoints();
+                    declareWinner();
+                    gameOnGoing = false;
+
+                }
+
             }
 
             turn = (turn + 1) % 2;
 
         }
-    
+    }
 
     public ArrayList<PlayingCard> createDeck() {
         ArrayList<PlayingCard> deck = new ArrayList<>();
