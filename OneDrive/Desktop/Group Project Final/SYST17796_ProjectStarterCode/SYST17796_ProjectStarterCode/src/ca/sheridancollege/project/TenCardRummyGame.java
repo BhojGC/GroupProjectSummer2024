@@ -157,10 +157,26 @@ public class TenCardRummyGame extends Game {
             }else{
                 System.out.println("Failed to discard Card. Please try Again.");
             }
+            if(verifyDeclaration(currentPlayer)){
+                
+                    System.out.println(currentPlayer.getName()+" have 1 Pure Sequence and 3 additional sequenes\n "
+                            + "Would you  like to Decalare the Game\n Enter D to declare the game");
+                    String userInput = scanner.next();
+                    
+                    if("D".equalsIgnoreCase(userInput)){
+                        System.out.println(currentPlayer.getName()+" had Declared.");
+                        calculateTotalPoints(currentPlayer);
+                    }
+                
+            }
+            
+            
             turn = (turn+1)%2;
 
         }
     }
+    
+    
 
     public ArrayList<PlayingCard> createDeck() {
         ArrayList<PlayingCard> deck = new ArrayList<>();
@@ -206,31 +222,40 @@ public class TenCardRummyGame extends Game {
             .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
             .sum();
 }
+    public void calculateTotalPoints(RummyPlayer player) {
+    // Calculate total points for Player 1
+    player1totalPoints = player1totalPoints + player1PointsInHand;
+    System.out.println(player1.getName() + " Total Points: " + player1totalPoints);
+
+    // Calculate total points for Player 2
+    player2totalPoints = player2totalPoints + player2PointsInHand;
+    System.out.println(player2.getName() + " Total Points: " + player2totalPoints);
+}
+    
+    
 
     public int evaluatePointsInHand(RummyPlayer player) {
         Hand hand = player.getHand();
-        int pointsInHand =0;
-        //checking for pure sequence
+        int pointsInHand = 100; // Default points if no sequences are found
+
         List<Card> pureSequences = hand.getPureSequences();
-        if(!pureSequences.isEmpty()){
-            //subtract points from total point
-            pointsInHand = 100 - calculatePoints(pureSequences);
-        }else{
-            pointsInHand = 100;
+        List<Card> impureSequences = hand.getImpureSequence();
+
+        if (!pureSequences.isEmpty()) {
+            pointsInHand -= calculatePoints(pureSequences);
+            if (!impureSequences.isEmpty()) {
+                pointsInHand -= calculatePoints(impureSequences);
+            }
         }
-        
-        //update player points
-        if(player == player1){
+
+        if (player == player1) {
             player1PointsInHand = pointsInHand;
-        }else if(player == player2){
+        } else if (player == player2) {
             player2PointsInHand = pointsInHand;
         }
-        System.out.println(player.getName()+" points in hand: "+ pointsInHand);
+
+        System.out.println(player.getName() + " points in hand: " + pointsInHand);
         return pointsInHand;
-        
-
-       
-
     }
 
     public Card drawCardFromDiscardPile() {
