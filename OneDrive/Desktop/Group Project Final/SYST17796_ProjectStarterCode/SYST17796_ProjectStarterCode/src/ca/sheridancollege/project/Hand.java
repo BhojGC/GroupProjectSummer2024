@@ -260,26 +260,48 @@ public class Hand extends GroupOfCards {
 }
      */
     public boolean isValidHand() {
-    List<Card> pureSequences = getPureSequences();
-    List<Card> impureSequences = getImpureSequence();
-    
+    List<List<Card>> pureSequences = getPureSequences();
+    List<List<Card>> impureSequences = getImpureSequence();
 
-    // Check if there is at least one pure sequence
-    boolean hasPureSequence = !pureSequences.isEmpty();
+    // Check for at least one valid sequence of 3 or 4 cards
+    boolean hasValidSequence = false;
+    for (List<Card> seq : pureSequences) {
+        if (seq.size() == 3 || seq.size() == 4) {
+            hasValidSequence = true;
+            break;
+        }
+    }
+    if (!hasValidSequence) {
+        for (List<Card> seq : impureSequences) {
+            if (seq.size() == 3 || seq.size() == 4) {
+                hasValidSequence = true;
+                break;
+            }
+        }
+    }
 
-    // Check if there is at least one valid additional sequence or a valid group of cards
-    boolean hasValidAdditionalSequence = !impureSequences.isEmpty() || !cardGroups.isEmpty();
+    // Check for one impure sequence of 4 cards
+    boolean hasImpureSequenceOf4 = false;
+    for (List<Card> seq : impureSequences) {
+        if (seq.size() == 4) {
+            hasImpureSequenceOf4 = true;
+            break;
+        }
+    }
 
-    // Check if there is at least one valid pure sequence and either:
-    // - One pure sequence and either (4 cards in a pure sequence or a valid impure sequence or group of cards)
-    // - OR at least one impure sequence or a group of cards
-    boolean hasValidHand = hasPureSequence && (
-        (pureSequences.size() >= 4 && hasValidAdditionalSequence) ||
-        hasValidAdditionalSequence
-    );
+    // Check for one impure sequence of 3 cards
+    boolean hasImpureSequenceOf3 = false;
+    for (List<Card> seq : impureSequences) {
+        if (seq.size() == 3) {
+            hasImpureSequenceOf3 = true;
+            break;
+        }
+    }
 
-    return hasValidHand;
+    // Return true if all conditions are met
+    return hasValidSequence && hasImpureSequenceOf4 && hasImpureSequenceOf3;
 }
+
 
 
     @Override
