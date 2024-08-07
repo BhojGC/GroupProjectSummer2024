@@ -70,7 +70,7 @@ public class Hand extends GroupOfCards {
             addValidSequence(pureSequences, currentSequence);
         }
 
-        return pureSequences.stream().distinct().collect(Collectors.toList());
+         return pureSequences.stream().distinct().collect(Collectors.toList());
     }
 
     /**
@@ -243,66 +243,46 @@ public class Hand extends GroupOfCards {
 
     }
 
-    /*public boolean isValidHand(){
+    public boolean isValidHand(){
     List<Card> pureSequences = getPureSequences();
     List<Card> impureSequences = getImpureSequence();
     
     // checking for at leat one pure sequence
     
-    boolean hasPureSequence = !pureSequences.isEmpty();
+    boolean hasPureSequence = !pureSequences.isEmpty() || pureSequences.size() >= 4;
     
-    //chcking for at least two sequences (either pure or impure)
+    boolean hasFirstImpureSequence = !impureSequences.isEmpty() || impureSequences.size() >= 4;
+    boolean hasSecondImpureSequence = !impureSequences.isEmpty() || impureSequences.size() >= 4;
+    
+    
+   /* //chcking for at least two sequences (either pure or impure)
     boolean hasAtleastTwoSequences = (pureSequences.size() >=3 && impureSequences.size() >=3) ||
                                                             (pureSequences.size() >=6) || (impureSequences.size() >=6);
     
-    // A valid hand must have at least one pure sequence and at least one additional sequence (pure or impure)
-    return hasPureSequence && hasAtleastTwoSequences;
+    boolean hasAtleastTwoSequences = for(getImpureSequence() impure: hand.)
+    
+    // A valid hand must have at least one pure sequence and at least one additional sequence (pure or impure)*/
+    return hasPureSequence && hasFirstImpureSequence &&hasSecondImpureSequence;
 }
-     */
+     /*
     public boolean isValidHand() {
-    List<List<Card>> pureSequences = getPureSequences();
-    List<List<Card>> impureSequences = getImpureSequence();
-
-    // Check for at least one valid sequence of 3 or 4 cards
-    boolean hasValidSequence = false;
-    for (List<Card> seq : pureSequences) {
-        if (seq.size() == 3 || seq.size() == 4) {
-            hasValidSequence = true;
-            break;
+        List<Card> pureSequences = getPureSequences();
+        List<Card> impureSequences = getImpureSequence();
+        for(Card seq : pureSequences){
+            if(seq.s)
         }
-    }
-    if (!hasValidSequence) {
-        for (List<Card> seq : impureSequences) {
-            if (seq.size() == 3 || seq.size() == 4) {
-                hasValidSequence = true;
-                break;
-            }
-        }
-    }
 
-    // Check for one impure sequence of 4 cards
-    boolean hasImpureSequenceOf4 = false;
-    for (List<Card> seq : impureSequences) {
-        if (seq.size() == 4) {
-            hasImpureSequenceOf4 = true;
-            break;
-        }
-    }
+        //checking for at least one pure sequence
+        boolean hasPureSequence = !pureSequences.isEmpty();
 
-    // Check for one impure sequence of 3 cards
-    boolean hasImpureSequenceOf3 = false;
-    for (List<Card> seq : impureSequences) {
-        if (seq.size() == 3) {
-            hasImpureSequenceOf3 = true;
-            break;
-        }
-    }
+        //checking if at least one valid additional sequence
+        boolean hasAdditionalSequence = (pureSequences.size() >= 4 || impureSequences.isEmpty() || impureSequences.size() >= 3);
 
-    // Return true if all conditions are met
-    return hasValidSequence && hasImpureSequenceOf4 && hasImpureSequenceOf3;
-}
+        //check if there is at least one valid additional sequence(pure sequence or impure sequence or group of 3 value cards
+        boolean hasAdditionalValidSequence = hasPureSequence || !impureSequences.isEmpty() || impureSequences.size() >= 3;
 
-
+        return hasPureSequence && hasAdditionalSequence && hasAdditionalValidSequence;
+    }*/
 
     @Override
     public String toString() {
