@@ -66,7 +66,6 @@ public class Hand extends GroupOfCards {
         return pureSequences.stream().distinct().collect(Collectors.toList());
     }
 
-
     /**
      * Checks if two cards are consecutive.
      *
@@ -78,9 +77,9 @@ public class Hand extends GroupOfCards {
         int seqValue1 = getSequentialValue(card1.getValue());
         int seqValue2 = getSequentialValue(card2.getValue());
 
-        return (seqValue1 - seqValue2) == -1 ||
-                (seqValue1 == 1 && seqValue2 == 13) || 
-                (seqValue1 == 13 && seqValue2 == 1); 
+        return (seqValue1 - seqValue2) == -1
+                || (seqValue1 == 1 && seqValue2 == 13)
+                || (seqValue1 == 13 && seqValue2 == 1);
     }
 
     private int getSequentialValue(Value value) {
@@ -122,10 +121,6 @@ public class Hand extends GroupOfCards {
         }
 
     }
-    
-    public boolean isImpure(){
-        if()
-    }
 
     public List<Card> getImpureSequence() {
         List<Card> impureSequence = new ArrayList<>();
@@ -159,10 +154,10 @@ public class Hand extends GroupOfCards {
         int seqValue1 = getSequentialValue(card1.getValue());
         int seqValue2 = getSequentialValue(card2.getValue());
 
-        return seqValue1 == seqValue2 || 
-               Math.abs(seqValue1 - seqValue2) == -1 || 
-               (seqValue1 == 1 && seqValue2 == 13) || 
-               (seqValue1 == 13 && seqValue2 == 1) && card1.getSuit() != card2.getSuit();
+        return seqValue1 == seqValue2
+                || Math.abs(seqValue1 - seqValue2) == -1
+                || (seqValue1 == 1 && seqValue2 == 13)
+                || (seqValue1 == 13 && seqValue2 == 1) && card1.getSuit() != card2.getSuit();
     }
 
     public boolean isValidHand() {
@@ -175,6 +170,7 @@ public class Hand extends GroupOfCards {
 
         return hasPureSequence && hasSequenceOfFour && hasSequenceOfThree;
     }
+
     @Override
     public String toString() {
 

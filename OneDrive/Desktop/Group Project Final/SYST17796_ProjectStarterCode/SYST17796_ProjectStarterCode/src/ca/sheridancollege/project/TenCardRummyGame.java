@@ -130,7 +130,7 @@ public class TenCardRummyGame extends Game {
     }
 
     public void playerTurn(RummyPlayer player, int playerIndex) {
-        printHand(player);
+       // printHand(player);
         printSequences(player);
         arrangeCards(player);
         evaluatePointsInHand(player, playerIndex);
@@ -147,7 +147,7 @@ public class TenCardRummyGame extends Game {
                 }
                 break;
             case 2:
-                Card drawnFromPile = drawCardFromDiscardPile();
+                Card drawnFromPile = drawCardFromDiscardPile(player);
                 if (drawnFromPile != null) {
                     player.getHand().addCard(drawnFromPile);
                 }
@@ -156,7 +156,7 @@ public class TenCardRummyGame extends Game {
                 System.out.println("Invalid Choice. Try again");
 
         }
-        printHand(player);
+        //printHand(player);
         arrangeCards(player);
         evaluatePointsInHand(player, playerIndex);
         printSequences(player);
@@ -196,10 +196,11 @@ public class TenCardRummyGame extends Game {
         return pointsInHand;
     }
 
-    public Card drawCardFromDiscardPile() {
+    public Card drawCardFromDiscardPile(RummyPlayer player) {
         if (discardPile.getSize() > 0) {
             Card drawnCard = discardPile.getCards().remove(0);
             discardPile.setSize(discardPile.getSize() - 1);
+            System.out.println(player.getName() + " Drew " + drawnCard + " from deck.");
             return drawnCard;
         } else {
             System.out.println("Discard Pile is Empty");
