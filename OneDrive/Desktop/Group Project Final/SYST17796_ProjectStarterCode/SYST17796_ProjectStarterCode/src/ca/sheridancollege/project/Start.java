@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author gcbho
+ * @author gcbhoj
  */
 public class Start {
 
