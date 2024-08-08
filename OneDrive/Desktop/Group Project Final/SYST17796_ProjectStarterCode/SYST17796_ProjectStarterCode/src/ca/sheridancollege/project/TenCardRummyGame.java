@@ -121,8 +121,8 @@ public class TenCardRummyGame extends Game {
 
     public void calculateTotalPoints() {
         for (int i = 0; i < players.size(); i++) {
-            totalPoints[i] += pointsInHand[i];
-            System.out.println(players.get(i).getName() + " Total Points: " + totalPoints[i]);
+            getTotalPoints()[i] += getPointsInHand()[i];
+            System.out.println(players.get(i).getName() + " Total Points: " + getTotalPoints()[i]);
         }
     }
 
@@ -177,20 +177,27 @@ public class TenCardRummyGame extends Game {
 
     public int evaluatePointsInHand(RummyPlayer player, int playerIndex) {
         Hand hand = player.getHand();
-        int pointsInHand = 100; // Default points if no sequences are found
+        int pointsInHand = 0;
 
+        // Get the pure and impure sequences
         List<Card> pureSequences = hand.getPureSequences();
         List<Card> impureSequences = hand.getImpureSequence();
 
-        if (!pureSequences.isEmpty()) {
-            pointsInHand -= calculatePoints(pureSequences);
-            if (!impureSequences.isEmpty()) {
-                pointsInHand -= calculatePoints(impureSequences);
-            }
-        }
+        // Collect all cards that are part of sequences
+        List<Card> allSequences = new ArrayList<>();
+        allSequences.addAll(pureSequences);
+        allSequences.addAll(impureSequences);
 
-        this.pointsInHand[playerIndex] = pointsInHand;
-        System.out.println(player.getName() + " points in hand: " + pointsInHand);
+        // Create a list of cards that are not part of any sequence
+        List<Card> remainingCards = new ArrayList<>(hand.getCards());
+        remainingCards.removeAll(allSequences);
+
+        // Calculate points only for remaining cards
+        pointsInHand = calculatePoints(remainingCards);
+
+        // Update the player's points in hand
+        player.setPointsInHand(pointsInHand);
+
         return pointsInHand;
     }
 
@@ -277,9 +284,9 @@ public class TenCardRummyGame extends Game {
 
     @Override
     public void declareWinner() {
-        if (totalPoints[0] < totalPoints[1]) {
+        if (getTotalPoints()[0] < getTotalPoints()[1]) {
             System.out.println(players.get(0).getName() + " wins!");
-        } else if (totalPoints[0] > totalPoints[1]) {
+        } else if (getTotalPoints()[0] > getTotalPoints()[1]) {
             System.out.println(players.get(1).getName() + " wins!");
         } else {
             System.out.println("It's a tie!");
@@ -310,5 +317,33 @@ public class TenCardRummyGame extends Game {
         for (Card card : hand.getCards()) {
             System.out.println(card);
         }
+    }
+
+    /**
+     * @return the totalPoints
+     */
+    public int[] getTotalPoints() {
+        return totalPoints;
+    }
+
+    /**
+     * @param totalPoints the totalPoints to set
+     */
+    public void setTotalPoints(int[] totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
+    /**
+     * @return the pointsInHand
+     */
+    public int[] getPointsInHand() {
+        return pointsInHand;
+    }
+
+    /**
+     * @param pointsInHand the pointsInHand to set
+     */
+    public void setPointsInHand(int[] pointsInHand) {
+        this.pointsInHand = pointsInHand;
     }
 }
