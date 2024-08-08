@@ -79,11 +79,10 @@ public class TenCardRummyGame extends Game {
                     gameOnGoing = false;
 
                 }
-                
 
             }
 
-            turn = (turn + 1) % 2;
+            turn = (turn + 1) % players.size();
 
         }
     }
@@ -195,8 +194,6 @@ public class TenCardRummyGame extends Game {
         System.out.println(player.getName() + " points in hand: " + pointsInHand);
         return pointsInHand;
     }
-    
-   
 
     public Card drawCardFromDiscardPile() {
         if (discardPile.getSize() > 0) {
@@ -264,6 +261,7 @@ public class TenCardRummyGame extends Game {
         boolean isValid = declareHand(player);
         if (isValid) {
             System.out.println(player.getName() + " has Declared a valid hand.");
+
         } else {
             System.out.println(player.getName() + " has Declared a Invalid hand.");
         }
