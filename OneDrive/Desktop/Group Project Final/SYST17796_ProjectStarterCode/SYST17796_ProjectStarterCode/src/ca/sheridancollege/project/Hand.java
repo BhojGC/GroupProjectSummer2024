@@ -162,7 +162,18 @@ public class Hand extends GroupOfCards {
         List<Card> impureSequences = getImpureSequence();
 
         // Check for at least one pure sequence of 3 or more cards
-        boolean hasPureSequence = !pureSequences.isEmpty();
+        boolean hasPureSequence = !pureSequences.isEmpty()
+                && (pureSequences.size() >= 3
+                || pureSequences.size() % 2 == 0);
+
+        // Similar expressions for the first and second impure sequences
+        boolean hasFirstImpureSequence = !impureSequences.isEmpty()
+                && (impureSequences.size() >= 3
+                || impureSequences.size() % 2 == 0);
+
+        boolean hasSecondImpureSequence = !impureSequences.isEmpty()
+                && (impureSequences.size() >= 3
+                || impureSequences.size() % 2 == 0);
 
         // Remaining cards after forming pure sequences
         List<Card> remainingCards = new ArrayList<>(getCards());
@@ -173,15 +184,15 @@ public class Hand extends GroupOfCards {
         // Check if the remaining cards can form valid impure sequences or sets
         boolean hasValidImpureSequences = false;
         if (remainingCards.size() >= 3) {
-            // Simple check: can remaining cards be arranged into sequences or sets
-            // Implement logic to verify sequences and sets in remainingCards
             hasValidImpureSequences = canFormValidCombinations(remainingCards);
         }
 
         // A valid hand must have:
         // - At least one pure sequence of 3 or more cards
+        // - At least one valid first impure sequence
+        // - At least one valid second impure sequence
         // - Remaining cards must be valid impure sequences or sets
-        return hasPureSequence && hasValidImpureSequences;
+        return hasPureSequence && hasFirstImpureSequence && hasSecondImpureSequence && hasValidImpureSequences;
     }
 
     private boolean canFormValidCombinations(List<Card> remainingCards) {
