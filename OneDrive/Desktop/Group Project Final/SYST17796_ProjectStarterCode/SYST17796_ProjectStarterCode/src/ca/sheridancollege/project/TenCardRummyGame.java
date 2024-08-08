@@ -200,7 +200,7 @@ public class TenCardRummyGame extends Game {
         if (discardPile.getSize() > 0) {
             Card drawnCard = discardPile.getCards().remove(0);
             discardPile.setSize(discardPile.getSize() - 1);
-            System.out.println(player.getName() + " Drew " + drawnCard + " from deck.");
+            System.out.println(player.getName() + " Drew " + drawnCard + " from Discard Pile.");
             return drawnCard;
         } else {
             System.out.println("Discard Pile is Empty");
