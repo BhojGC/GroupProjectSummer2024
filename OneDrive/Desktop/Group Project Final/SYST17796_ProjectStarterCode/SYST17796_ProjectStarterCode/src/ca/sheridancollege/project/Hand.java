@@ -77,7 +77,7 @@ public class Hand extends GroupOfCards {
         int seqValue1 = getSequentialValue(card1.getValue());
         int seqValue2 = getSequentialValue(card2.getValue());
 
-        return (seqValue1 - seqValue2) == -1
+        return Math.abs(seqValue1 - seqValue2) == 1
                 || (seqValue1 == 1 && seqValue2 == 13)
                 || (seqValue1 == 13 && seqValue2 == 1);
     }
@@ -123,41 +123,52 @@ public class Hand extends GroupOfCards {
     }
 
     public List<Card> getImpureSequence() {
-        List<Card> impureSequence = new ArrayList<>();
-        List<PlayingCard> allCards = getCards().stream()
-                .map(card -> (PlayingCard) card)
-                .collect(Collectors.toList());
+    // Get the pure sequences
+    List<Card> pureSequences = getPureSequences();
 
-        allCards.sort(Comparator.comparingInt(card -> card.getValue().getPoints()));
+    // Create a list of cards excluding those in pure sequences
+    List<PlayingCard> remainingCards = getCards()
+            .stream()
+            .map(card -> (PlayingCard) card)
+            .filter(card -> !pureSequences.contains(card))
+            .collect(Collectors.toList());
 
-        List<Card> currentSequence = new ArrayList<>();
-        for (PlayingCard card : allCards) {
-            if (currentSequence.isEmpty() || isImpureConsecutive(card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
-                currentSequence.add(card);
-            } else {
-                if (currentSequence.size() >= 3) {
-                    impureSequence.addAll(currentSequence);
-                }
-                currentSequence.clear();
-                currentSequence.add(card);
+    List<Card> impureSequence = new ArrayList<>();
+
+    // Sorting remaining cards regardless of suit
+    remainingCards.sort(Comparator.comparingInt(card -> card.getValue().getPoints()));
+
+    // Find impure sequences within the sorted list
+    List<Card> currentSequence = new ArrayList<>();
+    for (Card card : remainingCards) {
+        if (currentSequence.isEmpty() || isImpureConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+            currentSequence.add(card);
+        } else {
+            // If sequence breaks, check if it is valid and reset
+            if (currentSequence.size() >= 3) {
+                impureSequence.addAll(currentSequence);
             }
+            currentSequence.clear();
+            currentSequence.add(card);
         }
-
-        if (currentSequence.size() >= 3) {
-            impureSequence.addAll(currentSequence);
-        }
-
-        return impureSequence.stream().distinct().collect(Collectors.toList());
     }
+
+    // Check the last sequence
+    if (currentSequence.size() >= 3) {
+        impureSequence.addAll(currentSequence);
+    }
+
+    return impureSequence.stream().distinct().collect(Collectors.toList());
+}
 
     private boolean isImpureConsecutive(PlayingCard card1, PlayingCard card2) {
         int seqValue1 = getSequentialValue(card1.getValue());
         int seqValue2 = getSequentialValue(card2.getValue());
 
         return seqValue1 == seqValue2
-                || Math.abs(seqValue1 - seqValue2) == -1
+                || Math.abs(seqValue1 - seqValue2) == 1
                 || (seqValue1 == 1 && seqValue2 == 13)
-                || (seqValue1 == 13 && seqValue2 == 1) && card1.getSuit() != card2.getSuit();
+                || (seqValue1 == 13 && seqValue2 == 1);
     }
 
     public boolean isValidHand() {
