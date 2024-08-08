@@ -64,4 +64,19 @@ public class HandTest {
         assertEquals(expResult, result);
     }
     
+    @Test
+    public void isConsecutiveBoundry(){
+        System.out.println("Testing Consecutive Boundry Sequence");
+        
+        PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.TWO);
+        PlayingCard card2 = new PlayingCard(Suit.CLUBS, Value.THREE);
+        Hand hand = new Hand();
+        boolean expResult = false;
+        boolean result = hand.isConsecutive(card1, card2);
+        assertEquals(expResult, result);
+        
+    }
 }
+    
+    
+
