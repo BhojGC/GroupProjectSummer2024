@@ -173,6 +173,7 @@ public class TenCardRummyGame extends Game {
 
         // Discard the card using discardToPile method
         discardToPile(player, cardToDiscard);
+        evaluatePointsInHand(player, playerIndex);
 
     }
 
