@@ -140,7 +140,7 @@ public class Hand extends GroupOfCards {
 
         // Find impure sequences within the sorted list
         List<Card> currentSequence = new ArrayList<>();
-        for (Card card : remainingCards) {
+        for (PlayingCard card : remainingCards) {
             if (currentSequence.isEmpty()
                     || (isImpureConsecutive((PlayingCard) card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))
                     && card.getSuit() != ((PlayingCard) currentSequence.get(currentSequence.size() - 1)).getSuit())) {
