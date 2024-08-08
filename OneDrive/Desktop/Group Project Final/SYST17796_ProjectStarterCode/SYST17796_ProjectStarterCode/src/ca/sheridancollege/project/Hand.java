@@ -83,7 +83,7 @@ public class Hand extends GroupOfCards {
      * @return  true if the cards are consecutive, false otherwise.
      */
 
-    private boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
+    public boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
         int seqValue1 = getSequentialValue(card1.getValue());
         int seqValue2 = getSequentialValue(card2.getValue());
 
@@ -95,7 +95,7 @@ public class Hand extends GroupOfCards {
     }
     
     /**
-     * This method converts a card to its sequential numerica value
+     * This method converts a card to its sequential numerical value
      * @param value the value of the card.
      * @return  the sequential value of the card.
      */
