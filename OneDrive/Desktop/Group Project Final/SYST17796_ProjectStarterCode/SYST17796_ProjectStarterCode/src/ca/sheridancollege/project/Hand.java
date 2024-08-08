@@ -160,11 +160,43 @@ public class Hand extends GroupOfCards {
         List<Card> pureSequences = getPureSequences();
         List<Card> impureSequences = getImpureSequence();
 
+        // Check for at least one pure sequence of 3 or more cards
         boolean hasPureSequence = pureSequences.size() >= 3;
-        boolean hasSequenceOfFour = impureSequences.size() >= 4;
-        boolean hasSequenceOfThree = impureSequences.size() >= 3;
 
-        return hasPureSequence && hasSequenceOfFour && hasSequenceOfThree;
+        // Check if we can divide impure sequences into two valid groups
+        boolean hasValidImpureSequences = false;
+        if (impureSequences.size() >= 7) { // Needs at least 7 cards to form two sequences (4 + 3)
+            int sequenceOfFourCount = 0;
+            int sequenceOfThreeCount = 0;
+
+            // Count sequences of 4 and 3 cards in impure sequences
+            for (int i = 0; i < impureSequences.size(); i++) {
+                List<Card> currentSequence = new ArrayList<>();
+                currentSequence.add(impureSequences.get(i));
+
+                for (int j = i + 1; j < impureSequences.size(); j++) {
+                    if (isImpureConsecutive((PlayingCard) impureSequences.get(j), (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+                        currentSequence.add(impureSequences.get(j));
+                    }
+                }
+
+                if (currentSequence.size() >= 3) {
+                    if (currentSequence.size() == 4) {
+                        sequenceOfFourCount++;
+                    } else if (currentSequence.size() == 3) {
+                        sequenceOfThreeCount++;
+                    }
+                }
+            }
+
+            // Check if we have one sequence of 4 cards and one sequence of 3 cards
+            hasValidImpureSequences = sequenceOfFourCount >= 1 && sequenceOfThreeCount >= 1;
+        }
+
+        // A valid hand must have:
+        // - At least one pure sequence of 3 or more cards
+        // - One sequence of 4 cards and one sequence of 3 cards from impure sequences
+        return hasPureSequence && hasValidImpureSequences;
     }
 
     @Override

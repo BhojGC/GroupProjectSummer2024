@@ -131,8 +131,8 @@ public class TenCardRummyGame extends Game {
 
     public void playerTurn(RummyPlayer player, int playerIndex) {
        // printHand(player);
-        printSequences(player);
-        arrangeCards(player);
+        //printSequences(player);
+        //arrangeCards(player);
         evaluatePointsInHand(player, playerIndex);
 
         System.out.println("Enter 1 to Pick From Deck.");
@@ -157,9 +157,10 @@ public class TenCardRummyGame extends Game {
 
         }
         //printHand(player);
-        arrangeCards(player);
-        evaluatePointsInHand(player, playerIndex);
-        printSequences(player);
+        //arrangeCards(player);
+        //evaluatePointsInHand(player, playerIndex);
+        //printSequences(player);
+        arrangeAndEvaluateHand(player, playerIndex);
         System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
         int discardCardChoice = scanner.nextInt();
 
