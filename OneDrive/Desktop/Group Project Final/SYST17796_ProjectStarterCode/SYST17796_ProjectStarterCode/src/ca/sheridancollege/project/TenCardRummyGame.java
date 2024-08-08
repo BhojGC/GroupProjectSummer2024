@@ -66,12 +66,8 @@ public class TenCardRummyGame extends Game {
             playerTurn(currentPlayer, turn); // Perform the player's turn
             arrangeAndEvaluateHand(currentPlayer, turn); // Evaluate hand after turn
 
-            // Check if the player's hand contains at least one pure sequence and any other valid sequences or sets
-            boolean hasPureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
-            boolean hasValidSequencesOrSets = currentPlayer.getHand().isValidHand(); // Use isValidHand() to check overall validity
-
-            // Verify if the player's hand is valid
-            if (hasPureSequence && hasValidSequencesOrSets) {
+            // Check if the player's hand is valid
+            if (currentPlayer.getHand().isValidHand()) {
                 System.out.println(currentPlayer.getName() + " has a valid hand.");
                 System.out.println("Enter 'D' to Declare.");
 
@@ -195,14 +191,13 @@ public class TenCardRummyGame extends Game {
         Hand hand = player.getHand();
         int pointsInHand = 0;
 
-        // Get the pure and impure sequences
-        List<Card> pureSequences = hand.getPureSequences();
-        List<Card> impureSequences = hand.getImpureSequence();
+        if (!hand.isValidHand()) {
+            pointsInHand = 100; // Invalid hand, points are 100
+        } else {
+            // Get the pure and impure sequences
+            List<Card> pureSequences = hand.getPureSequences();
+            List<Card> impureSequences = hand.getImpureSequence();
 
-        // Check if the hand is valid
-        boolean isValidHand = hand.isValidHand();
-
-        if (isValidHand) {
             // Collect all cards that are part of sequences
             List<Card> allSequences = new ArrayList<>();
             allSequences.addAll(pureSequences);
@@ -215,15 +210,11 @@ public class TenCardRummyGame extends Game {
             // Calculate points only for remaining cards
             pointsInHand = calculatePoints(remainingCards);
 
-            // Subtract points for impure sequences from the total points
-            int pointsFromImpureSequences = calculatePoints(impureSequences);
-            pointsInHand -= pointsFromImpureSequences;
-
-            // Ensure points do not go below zero
-            pointsInHand = Math.max(pointsInHand, 0);
-        } else {
-            // If the hand is invalid, set points in hand to 100
-            pointsInHand = 100;
+            // If there is a valid pure sequence, deduct points for impure sequences
+            if (!pureSequences.isEmpty()) {
+                pointsInHand -= calculatePoints(impureSequences);
+                pointsInHand = Math.max(pointsInHand, 0); // Ensure points don't go negative
+            }
         }
 
         // Update the points in hand for the player

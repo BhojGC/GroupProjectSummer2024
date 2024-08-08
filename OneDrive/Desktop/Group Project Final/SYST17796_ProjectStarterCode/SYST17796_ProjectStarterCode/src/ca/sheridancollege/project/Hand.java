@@ -71,7 +71,7 @@ public class Hand extends GroupOfCards {
         return Math.abs(seqValue1 - seqValue2) == 1
                 || (seqValue1 == 1 && seqValue2 == 13)
                 || (seqValue1 == 13 && seqValue2 == 1)
-                ||(seqValue1 == 1 && seqValue2 == 2);
+                || (seqValue1 == 1 && seqValue2 == 2);
     }
 
     private int getSequentialValue(Value value) {
@@ -158,48 +158,78 @@ public class Hand extends GroupOfCards {
     }
 
     public boolean isValidHand() {
-    List<Card> pureSequences = getPureSequences();
-    List<Card> impureSequences = getImpureSequence();
-    List<Card> allCards = new ArrayList<>(getCards()); // All cards in the hand
+        List<Card> pureSequences = getPureSequences();
+        List<Card> impureSequences = getImpureSequence();
 
-    // Check for at least one pure sequence of 3 or more cards
-    boolean hasPureSequence = !pureSequences.isEmpty();
+        // Check for at least one pure sequence of 3 or more cards
+        boolean hasPureSequence = !pureSequences.isEmpty();
 
-    // To hold all the remaining cards after forming valid sequences
-    List<Card> remainingCards = new ArrayList<>(allCards);
-    for (Card card : pureSequences) {
-        remainingCards.remove(card);
+        // Remaining cards after forming pure sequences
+        List<Card> remainingCards = new ArrayList<>(getCards());
+        for (Card card : pureSequences) {
+            remainingCards.remove(card);
+        }
+
+        // Check if the remaining cards can form valid impure sequences or sets
+        boolean hasValidImpureSequences = false;
+        if (remainingCards.size() >= 3) {
+            // Simple check: can remaining cards be arranged into sequences or sets
+            // Implement logic to verify sequences and sets in remainingCards
+            hasValidImpureSequences = canFormValidCombinations(remainingCards);
+        }
+
+        // A valid hand must have:
+        // - At least one pure sequence of 3 or more cards
+        // - Remaining cards must be valid impure sequences or sets
+        return hasPureSequence && hasValidImpureSequences;
     }
-    for (Card card : impureSequences) {
-        remainingCards.remove(card);
+
+    private boolean canFormValidCombinations(List<Card> remainingCards) {
+        if (remainingCards == null || remainingCards.size() < 3) {
+            return false; // Not enough cards to form valid combinations
+        }
+
+        // Sort cards by rank
+        remainingCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card).getValue().ordinal()));
+
+        // To form valid sets, cards should be grouped by their rank
+        Map<Value, List<Card>> rankGroups = remainingCards.stream()
+                .collect(Collectors.groupingBy(card -> ((PlayingCard) card).getValue()));
+
+        // Check if we can form sets (at least 3 cards of the same rank)
+        boolean canFormSets = rankGroups.values().stream()
+                .anyMatch(group -> group.size() >= 3);
+
+        // Check for valid sequences (runs)
+        boolean canFormSequences = false;
+        List<Card> sequence = new ArrayList<>();
+
+        for (int i = 0; i < remainingCards.size(); i++) {
+            if (sequence.isEmpty()) {
+                sequence.add(remainingCards.get(i));
+            } else {
+                Card lastCard = sequence.get(sequence.size() - 1);
+                if (isConsecutive((PlayingCard) remainingCards.get(i), (PlayingCard) lastCard)) {
+                    sequence.add(remainingCards.get(i));
+                } else {
+                    if (sequence.size() >= 3) {
+                        canFormSequences = true; // Found a valid sequence
+                        break;
+                    }
+                    sequence.clear();
+                    sequence.add(remainingCards.get(i));
+                }
+            }
+        }
+
+        // Check if the last sequence is valid
+        if (sequence.size() >= 3) {
+            canFormSequences = true;
+        }
+
+        return canFormSets || canFormSequences;
     }
 
-    // After removing pure and impure sequences, remaining cards should form valid sets or sequences
-    // For simplicity, this example assumes remaining cards can form sets (combinations of cards of the same rank)
-    boolean hasValidCombinations = canFormValidCombinations(remainingCards);
-
-    // Valid hand conditions:
-    // 1. At least one pure sequence
-    // 2. Remaining cards should be arranged into valid combinations (sequences or sets)
-    return hasPureSequence && hasValidCombinations;
-}
-
-private boolean canFormValidCombinations(List<Card> remainingCards) {
-    // To form valid sets, cards should be grouped by their rank
-    Map<Value, List<Card>> rankGroups = remainingCards.stream()
-        .collect(Collectors.groupingBy(card -> ((PlayingCard) card).getValue()));
-
-    // Check if we can form sets (at least 3 cards of the same rank)
-    boolean canFormSets = rankGroups.values().stream()
-        .anyMatch(group -> group.size() >= 3);
-
-    // You can add more logic here to check for valid sequences if needed
-    // This example only checks for sets
-
-    return canFormSets;
-}
-
-    
     public boolean declareHand() {
         return isValidHand();
     }
