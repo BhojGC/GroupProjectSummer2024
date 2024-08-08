@@ -198,6 +198,10 @@ public class Hand extends GroupOfCards {
         // - One sequence of 4 cards and one sequence of 3 cards from impure sequences
         return hasPureSequence && hasValidImpureSequences;
     }
+    
+    public boolean declareHand() {
+        return isValidHand();
+    }
 
     @Override
     public String toString() {

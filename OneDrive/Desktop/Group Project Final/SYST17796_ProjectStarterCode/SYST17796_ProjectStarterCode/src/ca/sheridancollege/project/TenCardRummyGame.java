@@ -62,28 +62,25 @@ public class TenCardRummyGame extends Game {
         while (gameOnGoing) {
             RummyPlayer currentPlayer = players.get(turn);
             System.out.println(currentPlayer.getName() + " Turn:");
+
             playerTurn(currentPlayer, turn);
+            printHand(currentPlayer);
+            printSequences(currentPlayer);
+            arrangeCards(currentPlayer);
 
-            boolean hasPureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
-            boolean hasImpureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
-
-            if (hasPureSequence && hasImpureSequence) {
+            if (currentPlayer.getHand().declareHand()) {
                 System.out.println(currentPlayer.getName() + " has a valid hand.");
                 System.out.println("Enter 'D' to Declare.");
                 String declareInput = scanner.next();
                 if ("D".equalsIgnoreCase(declareInput)) {
-                    declareHand(currentPlayer);
                     verifyDeclaration(currentPlayer);
                     calculateTotalPoints();
                     declareWinner();
                     gameOnGoing = false;
-
                 }
-
             }
 
             turn = (turn + 1) % players.size();
-
         }
     }
 
@@ -130,10 +127,10 @@ public class TenCardRummyGame extends Game {
     }
 
     public void playerTurn(RummyPlayer player, int playerIndex) {
-       // printHand(player);
+        // printHand(player);
         //printSequences(player);
         //arrangeCards(player);
-        evaluatePointsInHand(player, playerIndex);
+        arrangeAndEvaluateHand(player, playerIndex);
 
         System.out.println("Enter 1 to Pick From Deck.");
         System.out.println("Enter 2 to Pick FROM Discard Pile");
@@ -174,7 +171,7 @@ public class TenCardRummyGame extends Game {
 
         // Discard the card using discardToPile method
         discardToPile(player, cardToDiscard);
-        evaluatePointsInHand(player, playerIndex);
+        arrangeAndEvaluateHand(player, playerIndex);
 
     }
 
@@ -255,13 +252,9 @@ public class TenCardRummyGame extends Game {
         }
     }
 
-    public boolean declareHand(RummyPlayer player) {
-        return player.getHand().isValidHand();
-    }
-
     public boolean verifyDeclaration(RummyPlayer player) {
         //verifying if the player declared hand is valid
-        boolean isValid = declareHand(player);
+        boolean isValid = player.getHand().isValidHand();
         if (isValid) {
             System.out.println(player.getName() + " has Declared a valid hand.");
 
