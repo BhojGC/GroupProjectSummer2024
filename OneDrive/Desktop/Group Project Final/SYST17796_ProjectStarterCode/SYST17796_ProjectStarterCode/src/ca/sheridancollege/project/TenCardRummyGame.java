@@ -201,8 +201,6 @@ public class TenCardRummyGame extends Game {
         // Check if the hand is valid
         if (hand.isValidHand()) {
             pointsInHand = 0; // If the hand is valid, points in hand are 0
-        }else{
-            pointsInHand = 100;
         }
 
         // Update the points in hand for the player
