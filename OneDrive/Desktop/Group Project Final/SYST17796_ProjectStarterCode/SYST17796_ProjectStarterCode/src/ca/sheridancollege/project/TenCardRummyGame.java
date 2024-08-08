@@ -64,7 +64,7 @@ public class TenCardRummyGame extends Game {
             System.out.println(currentPlayer.getName() + "'s Turn:");
 
             playerTurn(currentPlayer, turn); // Perform the player's turn
-            arrangeAndEvaluateHand(currentPlayer, turn); // Evaluate hand after turn
+            //arrangeAndEvaluateHand(currentPlayer, turn); // Evaluate hand after turn
 
             // Check if the player's hand is valid
             if (currentPlayer.getHand().isValidHand()) {
@@ -137,7 +137,7 @@ public class TenCardRummyGame extends Game {
         //printSequences(player);
         //arrangeCards(player);
         arrangeAndEvaluateHand(player, playerIndex);
-        verifyDeclaration(player);
+        //verifyDeclaration(player);
 
         System.out.println("Enter 1 to Pick From Deck.");
         System.out.println("Enter 2 to Pick FROM Discard Pile");
@@ -165,7 +165,6 @@ public class TenCardRummyGame extends Game {
         //evaluatePointsInHand(player, playerIndex);
         //printSequences(player);
         arrangeAndEvaluateHand(player, playerIndex);
-        verifyDeclaration(player);
         System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
         int discardCardChoice = scanner.nextInt();
 
@@ -180,7 +179,7 @@ public class TenCardRummyGame extends Game {
         // Discard the card using discardToPile method
         discardToPile(player, cardToDiscard);
         arrangeAndEvaluateHand(player, playerIndex);
-        verifyDeclaration(player);
+        //verifyDeclaration(player);
 
     }
 
