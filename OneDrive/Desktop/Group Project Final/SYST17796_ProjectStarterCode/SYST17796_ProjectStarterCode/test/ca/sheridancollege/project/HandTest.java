@@ -106,11 +106,54 @@ public class HandTest {
         System.out.println("Testing for ImpureConsecutive Boundry ");
         
         PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.ACE);
-        PlayingCard card2 = new PlayingCard(Suit.CLUBS, Value.TWO);
+        PlayingCard card2 = new PlayingCard(Suit.DIAMONDS, Value.THREE);
         Hand hand = new Hand();
         boolean expResult = false;
         boolean result = hand.isImpureConsecutive(card1, card2);
         assertEquals(expResult, result);
+        
+    }
+    
+    @Test
+    public void isValidHandGood(){
+        Hand hand = new Hand();
+        
+        System.out.println("Testing for is Valid Good");
+        PlayingCard card1 = new PlayingCard(Suit.CLUBS,Value.ACE);
+        PlayingCard card2 = new PlayingCard(Suit.CLUBS,Value.KING);
+        PlayingCard card3 = new PlayingCard(Suit.CLUBS, Value.QUEEN);
+        
+        hand.addCard(card1);
+        hand.addCard(card2);
+        hand.addCard(card3);
+        
+        PlayingCard card4 = new PlayingCard(Suit.CLUBS, Value.FOUR);
+        PlayingCard card5 = new PlayingCard(Suit.DIAMONDS, Value.FOUR);
+        PlayingCard card6 = new PlayingCard(Suit.HEARTS, Value.FOUR);
+        
+        hand.addCard(card4);
+        hand.addCard(card5);
+        hand.addCard(card6);
+        
+        PlayingCard card7 = new PlayingCard(Suit.CLUBS,Value.ACE);
+        PlayingCard card8 = new PlayingCard(Suit.DIAMONDS,Value.TWO);
+        PlayingCard card9 = new PlayingCard(Suit.HEARTS, Value.THREE);
+        PlayingCard card10 = new PlayingCard(Suit.SPADES, Value.FOUR);
+        
+        hand.addCard(card7);
+        hand.addCard(card8);
+        hand.addCard(card9);
+        hand.addCard(card10);
+        
+        boolean expResult = true;
+        boolean result = hand.isValidHand();
+        assertEquals(expResult, result);
+        
+        
+        
+        
+        
+        
         
     }
     
