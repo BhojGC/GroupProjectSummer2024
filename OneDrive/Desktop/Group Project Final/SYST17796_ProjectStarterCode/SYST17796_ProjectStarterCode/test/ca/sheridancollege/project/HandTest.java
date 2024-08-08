@@ -102,7 +102,18 @@ public class HandTest {
     }
     
     @Test
-    public void isImpure
+    public void isImpureConsecutiveBoundry(){
+        System.out.println("Testing for ImpureConsecutive Boundry ");
+        
+        PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.ACE);
+        PlayingCard card2 = new PlayingCard(Suit.CLUBS, Value.TWO);
+        Hand hand = new Hand();
+        boolean expResult = false;
+        boolean result = hand.isImpureConsecutive(card1, card2);
+        assertEquals(expResult, result);
+        
+    }
+    
 }
     
     
