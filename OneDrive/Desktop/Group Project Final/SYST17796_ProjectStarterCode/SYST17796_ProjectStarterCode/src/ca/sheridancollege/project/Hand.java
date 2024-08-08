@@ -234,25 +234,35 @@ public class Hand extends GroupOfCards {
         return false;
     }
 
-    public boolean isValidHand() {
-        List<Card> pureCards = getPureSequences(); // This should return List<Card>
-        List<Card> impureCards = getImpureSequence(); // This should return List<Card>
+   public boolean isValidHand() {
+    List<Card> pureCards = getPureSequences(); // This should return List<Card>
+    List<Card> impureCards = getImpureSequence(); // This should return List<Card>
 
-        // Check for at least one pure sequence of 3 or 4 cards
-        boolean hasPureSequence = pureCards.size() >= 3 && pureCards.size() <= 4;
+    // Check for at least one pure sequence of 3 or 4 cards
+    boolean hasPureSequence = pureCards.size() >= 3 && pureCards.size() <= 4;
 
-        // Check for at least one impure sequence of 3 or 4 cards
-        boolean hasFirstImpureSequence = impureCards.size() >= 3 && impureCards.size() <= 4;
+    // Split the impure sequences into two checks
+    boolean hasFirstImpureSequence = false;
+    boolean hasSecondImpureSequence = false;
 
-        // Check for at least one additional impure sequence of exactly 3 cards
-        boolean hasSecondImpureSequence = impureCards.size() == 3;
-
-        // A valid hand must have:
-        // - At least one pure sequence of 3 or 4 cards
-        // - At least one impure sequence of 3 or 4 cards
-        // - At least one additional impure sequence of exactly 3 cards
-        return hasPureSequence && hasFirstImpureSequence && hasSecondImpureSequence;
+    if (impureCards.size() >= 6) {
+        // If the impureCards list has 6 or more cards, we can have two sequences
+        hasFirstImpureSequence = true;
+        hasSecondImpureSequence = true;
+    } else if (impureCards.size() >= 3) {
+        // If the impureCards list has 3 to 5 cards, we can have one valid sequence
+        hasFirstImpureSequence = true;
+        // Check if there are exactly 3 cards for the second sequence
+        hasSecondImpureSequence = impureCards.size() == 3;
     }
+
+    // A valid hand must have:
+    // - At least one pure sequence of 3 or 4 cards
+    // - At least one impure sequence of 3 or 4 cards
+    // - At least one additional impure sequence of exactly 3 cards
+    return hasPureSequence && hasFirstImpureSequence && hasSecondImpureSequence;
+}
+
 
    
     @Override
