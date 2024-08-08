@@ -194,7 +194,7 @@ public class Hand extends GroupOfCards {
      * @return  true if the cards are impure consecutive, false otherwise.
      */
 
-    private boolean isImpureConsecutive(PlayingCard card1, PlayingCard card2) {
+    public boolean isImpureConsecutive(PlayingCard card1, PlayingCard card2) {
         int seqValue1 = getSequentialValue(card1.getValue());
         int seqValue2 = getSequentialValue(card2.getValue());
 

@@ -69,13 +69,40 @@ public class HandTest {
         System.out.println("Testing Consecutive Boundry Sequence");
         
         PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.TWO);
-        PlayingCard card2 = new PlayingCard(Suit.CLUBS, Value.THREE);
+        PlayingCard card2 = new PlayingCard(Suit.SPADES, Value.THREE);
         Hand hand = new Hand();
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = hand.isConsecutive(card1, card2);
         assertEquals(expResult, result);
         
     }
+    
+    @Test
+    public void isImpureConsecutiveGood(){
+        System.out.println("Testing for ImpureConsecutive Good");
+        
+        PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.ACE);
+        PlayingCard card2 = new PlayingCard(Suit.DIAMONDS, Value.KING);
+        Hand hand = new Hand();
+        boolean expResult = true;
+        boolean result = hand.isImpureConsecutive(card1, card2);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void isImpureConsecutiveBad(){
+        System.out.println("Testing for ImpureConsecutive Bad ");
+        
+        PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.ACE);
+        PlayingCard card2 = new PlayingCard(Suit.CLUBS, Value.THREE);
+        Hand hand = new Hand();
+        boolean expResult = false;
+        boolean result = hand.isImpureConsecutive(card1, card2);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void isImpure
 }
     
     
