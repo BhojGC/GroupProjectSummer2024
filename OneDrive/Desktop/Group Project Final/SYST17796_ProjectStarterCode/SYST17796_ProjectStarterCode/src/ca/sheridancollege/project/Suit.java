@@ -9,9 +9,9 @@ package ca.sheridancollege.project;
  * @author gcbho
  */
 public enum Suit {
-     HEARTS, 
+    HEARTS,
     CLUBS,
-    SPADES, 
+    SPADES,
     DIAMONDS
-    
+
 }

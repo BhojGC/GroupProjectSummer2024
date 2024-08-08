@@ -21,8 +21,6 @@ public class RummyPlayer extends Player {
         return hand;
     }
 
-   
-
     @Override
     public void play() {
 

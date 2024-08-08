@@ -16,25 +16,26 @@ import static org.junit.Assert.*;
  * @author gcbho
  */
 public class PasswordValidatorTest {
-    
+
     public PasswordValidatorTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
+
     @Test
     public void testCheckLengthGood() {
         System.out.println("checkLength");
@@ -46,6 +47,7 @@ public class PasswordValidatorTest {
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
+
     @Test
     public void testCheckLengthBad() {
         System.out.println("checkLength");
@@ -57,6 +59,7 @@ public class PasswordValidatorTest {
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
+
     @Test
     public void testCheckLengthBoundry() {
         System.out.println("checkLength");
@@ -83,6 +86,7 @@ public class PasswordValidatorTest {
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
+
     @Test
     public void testCheckUpperBorderBad() {
         System.out.println("checkUpper");
@@ -92,8 +96,9 @@ public class PasswordValidatorTest {
         boolean result = instance.checkUpperCase(password);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       // fail("The test case is a prototype.");
+        // fail("The test case is a prototype.");
     }
+
     @Test
     public void testCheckUpperBorderBoundry() {
         System.out.println("checkUpper");
@@ -103,7 +108,7 @@ public class PasswordValidatorTest {
         boolean result = instance.checkUpperCase(password);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       // fail("The test case is a prototype.");
+        // fail("The test case is a prototype.");
     }
 
     /**
@@ -118,8 +123,9 @@ public class PasswordValidatorTest {
         boolean result = instance.checkSpecialCharacter(password);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       // fail("The test case is a prototype.");
+        // fail("The test case is a prototype.");
     }
+
     @Test
     public void testCheckSpecialCharacterBad() {
         System.out.println("checkSpecialCharacter");
@@ -129,8 +135,9 @@ public class PasswordValidatorTest {
         boolean result = instance.checkSpecialCharacter(password);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       // fail("The test case is a prototype.");
+        // fail("The test case is a prototype.");
     }
+
     @Test
     public void testCheckSpecialCharacterBoundry() {
         System.out.println("checkSpecialCharacter");
@@ -140,9 +147,7 @@ public class PasswordValidatorTest {
         boolean result = instance.checkSpecialCharacter(password);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       // fail("The test case is a prototype.");
+        // fail("The test case is a prototype.");
     }
 
-   
-    
 }

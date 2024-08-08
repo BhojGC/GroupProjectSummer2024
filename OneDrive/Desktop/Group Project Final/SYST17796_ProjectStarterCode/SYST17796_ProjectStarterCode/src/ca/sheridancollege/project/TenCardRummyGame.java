@@ -31,12 +31,13 @@ public class TenCardRummyGame extends Game {
         this.pointsInHand = new int[2];
 
     }
+
     /**
-     * the following method initializes the game by setting up players, creating, shuffling and dealing cards
-     * and setting up the discard pile.
+     * the following method initializes the game by setting up players,
+     * creating, shuffling and dealing cards and setting up the discard pile.
+     *
      * @param gcbho
      */
-
     public void intializeGame(RummyPlayer[] gamePlayers) {
         this.players.addAll(List.of(gamePlayers));
         ArrayList<PlayingCard> cardList = createDeck();
@@ -58,10 +59,11 @@ public class TenCardRummyGame extends Game {
         System.out.println("Discard Pile Card: " + discardPile.getCards().get(0));
 
     }
-/**
- * Main game loop that handles player turns, checks for valid hand, and declares the winner.
- * if valid hand is declared.
- */
+
+    /**
+     * Main game loop that handles player turns, checks for valid hand, and
+     * declares the winner. if valid hand is declared.
+     */
     @Override
     public void play() {
         boolean gameOnGoing = true;
@@ -94,12 +96,12 @@ public class TenCardRummyGame extends Game {
             turn = (turn + 1) % players.size();
         }
     }
-    
+
     /**
      * Creates a deck of cards with all possible suits and values.
+     *
      * @param gcbho
      */
-
     public ArrayList<PlayingCard> createDeck() {
         ArrayList<PlayingCard> deck = new ArrayList<>();
         for (Suit suit : Suit.values()) {
@@ -110,11 +112,10 @@ public class TenCardRummyGame extends Game {
         System.out.println("Deck Created");
         return deck;
     }
-    
+
     /**
      * This method will be responsible for dealing cards to the players.
      */
-
     public void dealCards() {
         for (int i = 0; i < 20; i++) {
             Card card = deck.getCards().remove(0);
@@ -126,24 +127,26 @@ public class TenCardRummyGame extends Game {
             }
         }
     }
-    /**
-     * Arranges the cards in the players hand, evaluates points in hand, and prints sequencces of cards.
-     * @param player 
-     * @param playerIndex 
-     */
 
+    /**
+     * Arranges the cards in the players hand, evaluates points in hand, and
+     * prints sequencces of cards.
+     *
+     * @param player
+     * @param playerIndex
+     */
     public void arrangeAndEvaluateHand(RummyPlayer player, int playerIndex) {
         arrangeCards(player);
         evaluatePointsInHand(player, playerIndex);
         printSequences(player);
     }
-    
+
     /**
      * Calculates the total points for a list of cards
+     *
      * @param cards
-     * @return 
+     * @return
      */
-
     public int calculatePoints(List<Card> cards) {
         // Ensure that all cards in the list are instances of PlayingCard
         return cards.stream()
@@ -152,25 +155,25 @@ public class TenCardRummyGame extends Game {
                 .mapToInt(playingCard -> playingCard.getValue().getPoints()) // Get the points for each card
                 .sum(); // Sum up the points
     }
-    
-    /**
-     * Calculates the total points for the players at the end of the game. which can be used to declare
-     * winner
-     */
 
+    /**
+     * Calculates the total points for the players at the end of the game. which
+     * can be used to declare winner
+     */
     public void calculateTotalPoints() {
         for (int i = 0; i < players.size(); i++) {
             getTotalPoints()[i] += getPointsInHand()[i];
             System.out.println(players.get(i).getName() + " Total Points: " + getTotalPoints()[i]);
         }
     }
-    /**
-     * Handles all the player turns, including drawing cards from the deck, discarding 
-     * and evaluating the hand.
-     * @param player
-     * @param playerIndex 
-     */
 
+    /**
+     * Handles all the player turns, including drawing cards from the deck,
+     * discarding and evaluating the hand.
+     *
+     * @param player
+     * @param playerIndex
+     */
     public void playerTurn(RummyPlayer player, int playerIndex) {
         // printHand(player);
         //printSequences(player);
@@ -261,13 +264,13 @@ public class TenCardRummyGame extends Game {
         // Print the points in hand for debugging
         System.out.println(player.getName() + "'s Points in Hand: " + pointsInHand);
     }
-    
-    /**
-     * Method used to draw card from discard pile 
-     * @param player
-     * @return 
-     */
 
+    /**
+     * Method used to draw card from discard pile
+     *
+     * @param player
+     * @return
+     */
     public Card drawCardFromDiscardPile(RummyPlayer player) {
         if (discardPile.getSize() > 0) {
             Card drawnCard = discardPile.getCards().remove(0);
@@ -279,12 +282,11 @@ public class TenCardRummyGame extends Game {
             return null;
         }
     }
-    
+
     /**
-     * 
+     *
      * Method used to draw card from deck.
      */
-
     public Card drawCardFromDeck(RummyPlayer player) {
         if (deck.getSize() > 0) {
             Card drawnCard = deck.getCards().remove(0);
@@ -297,13 +299,13 @@ public class TenCardRummyGame extends Game {
             return null;
         }
     }
-    
+
     /**
      * Method used to discard the card to the discard pile
+     *
      * @param player
-     * @param card 
+     * @param card
      */
-
     public void discardToPile(RummyPlayer player, Card card) {
         //Removing the card from the player's hand
         player.getHand().discardCard(card);
@@ -312,12 +314,13 @@ public class TenCardRummyGame extends Game {
         discardPile.setSize(discardPile.getSize() + 1);
         System.out.println(player.getName() + " discarded " + card);
     }
-    
-    /**
-     * Method analyzes the cards in the players hand and prints out the pure and impure sequences
-     * @param player 
-     */
 
+    /**
+     * Method analyzes the cards in the players hand and prints out the pure and
+     * impure sequences
+     *
+     * @param player
+     */
     public void printSequences(RummyPlayer player) {
         Hand hand = player.getHand();
 
@@ -341,13 +344,13 @@ public class TenCardRummyGame extends Game {
             }
         }
     }
-    
+
     /**
      * This method is responsible to verify the players decleration.
+     *
      * @param player
-     * @return 
+     * @return
      */
-
     public boolean verifyDeclaration(RummyPlayer player) {
         //verifying if the player declared hand is valid
         boolean isValid = player.getHand().isValidHand();
@@ -360,12 +363,12 @@ public class TenCardRummyGame extends Game {
         return isValid;
 
     }
-    
+
     /**
      * Ends the current round
-     * @param player 
+     *
+     * @param player
      */
-
     public void endRound(RummyPlayer player) {
         boolean isValid = verifyDeclaration(player);
         if (isValid) {
@@ -375,11 +378,10 @@ public class TenCardRummyGame extends Game {
         }
 
     }
-    
+
     /**
      * this method is responsible for declaring the winner.
      */
-
     @Override
     public void declareWinner() {
         if (getTotalPoints()[0] < getTotalPoints()[1]) {
@@ -390,12 +392,13 @@ public class TenCardRummyGame extends Game {
             System.out.println("It's a tie!");
         }
     }
-    
-    /**
-     * This method arranges the cards in the players hand according to suit and then by points.
-     * @param player 
-     */
 
+    /**
+     * This method arranges the cards in the players hand according to suit and
+     * then by points.
+     *
+     * @param player
+     */
     public void arrangeCards(RummyPlayer player) {
         Hand hand = player.getHand();
         //sort cards by siut first, then by value
@@ -411,12 +414,12 @@ public class TenCardRummyGame extends Game {
         //printing the sorted cards Array
         System.out.println(player.getName() + "\n" + sortedCards);
     }
-    
+
     /**
      * prints the cards in the players hand.
-     * @param player 
+     *
+     * @param player
      */
-
     public void printHand(RummyPlayer player) {
         Hand hand = player.getHand();
         if (hand.getCards().isEmpty()) {

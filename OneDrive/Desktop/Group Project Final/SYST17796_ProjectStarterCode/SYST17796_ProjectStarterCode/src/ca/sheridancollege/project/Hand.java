@@ -93,16 +93,15 @@ public class Hand extends GroupOfCards {
      * @return true if the cards are consecutive, false otherwise.
      */
     public boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
-    // Cards must be of the same suit to be part of a pure sequence
-    if (card1.getSuit() != card2.getSuit()) {
-        return false;
+        // Cards must be of the same suit to be part of a pure sequence
+        if (card1.getSuit() != card2.getSuit()) {
+            return false;
+        }
+
+        // Check if the values are consecutive
+        int valueDiff = card2.getValue().getPoints() - card1.getValue().getPoints();
+        return valueDiff == 1; // True if card2 follows directly after card1
     }
-
-    // Check if the values are consecutive
-    int valueDiff = card2.getValue().getPoints() - card1.getValue().getPoints();
-    return valueDiff == 1; // True if card2 follows directly after card1
-}
-
 
     /**
      * This method converts a card to its sequential numerical value
@@ -165,40 +164,39 @@ public class Hand extends GroupOfCards {
      * @return
      */
     public List<Card> getImpureSequence() {
-    List<Card> impureSequences = new ArrayList<>();
+        List<Card> impureSequences = new ArrayList<>();
 
-    // Retrieve the pure sequences first
-    List<Card> pureSequences = getPureSequences();
-    List<PlayingCard> remainingCards = getCards().stream()
-            .map(card -> (PlayingCard) card)
-            .filter(card -> !pureSequences.contains(card))
-            .sorted(Comparator.comparingInt(card -> getSequentialValue(card.getValue())))
-            .collect(Collectors.toList());
+        // Retrieve the pure sequences first
+        List<Card> pureSequences = getPureSequences();
+        List<PlayingCard> remainingCards = getCards().stream()
+                .map(card -> (PlayingCard) card)
+                .filter(card -> !pureSequences.contains(card))
+                .sorted(Comparator.comparingInt(card -> getSequentialValue(card.getValue())))
+                .collect(Collectors.toList());
 
-    List<Card> currentSequence = new ArrayList<>();
+        List<Card> currentSequence = new ArrayList<>();
 
-    for (PlayingCard card : remainingCards) {
-        if (currentSequence.isEmpty() || 
-            isImpureConsecutive(card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
-            currentSequence.add(card);
-        } else {
-            // If sequence breaks, add to impure sequences if valid
-            if (currentSequence.size() >= 3) {
-                impureSequences.addAll(currentSequence);
+        for (PlayingCard card : remainingCards) {
+            if (currentSequence.isEmpty()
+                    || isImpureConsecutive(card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+                currentSequence.add(card);
+            } else {
+                // If sequence breaks, add to impure sequences if valid
+                if (currentSequence.size() >= 3) {
+                    impureSequences.addAll(currentSequence);
+                }
+                currentSequence.clear();
+                currentSequence.add(card);
             }
-            currentSequence.clear();
-            currentSequence.add(card);
         }
+
+        // Check the last sequence
+        if (currentSequence.size() >= 3) {
+            impureSequences.addAll(currentSequence);
+        }
+
+        return impureSequences;
     }
-
-    // Check the last sequence
-    if (currentSequence.size() >= 3) {
-        impureSequences.addAll(currentSequence);
-    }
-
-    return impureSequences;
-}
-
 
     /**
      * Checks if two cards are impure consecutive. cards must be consecutive in
@@ -257,7 +255,6 @@ public class Hand extends GroupOfCards {
      * @param remainingCards
      * @return
      */
-
     private boolean canFormValidCombinations(List<Card> remainingCards) {
         if (remainingCards == null || remainingCards.size() < 3) {
             return false; // Not enough cards to form valid combinations
