@@ -21,16 +21,28 @@ public class Hand extends GroupOfCards {
         super(0);
 
     }
-
+/**
+ * method used to add card either to the players hand or the discard pile.
+ * @param card 
+ */
     public void addCard(Card card) {
         getCards().add(card);
         setSize(getCards().size());
     }
-
+/**
+ * method used to discard the selected card to the discard pile.
+ * @param card 
+ */
     public void discardCard(Card card) {
         getCards().remove(card);
         setSize(getSize() - 1);
     }
+    
+    /**
+     * This method is responsible for getting all pure sequences from the players hand.
+     * A pure sequence will consist of cards of the same suit in consecutive order.
+     * @returns A list of pure sequence cards.
+     */
 
     public List<Card> getPureSequences() {
         List<Card> pureSequences = new ArrayList<>();
@@ -62,6 +74,14 @@ public class Hand extends GroupOfCards {
         // Return the pure sequences
         return pureSequences.stream().distinct().collect(Collectors.toList());
     }
+    
+    /**
+     * Method to check if two cards are consecutive
+     * Considers Ace as both high and low cards
+     * @param card1 the first card
+     * @param card2 the second card
+     * @return  true if the cards are consecutive, false otherwise.
+     */
 
     private boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
         int seqValue1 = getSequentialValue(card1.getValue());
@@ -73,6 +93,12 @@ public class Hand extends GroupOfCards {
                 || (seqValue1 == 13 && seqValue2 == 1)
                 || (seqValue1 == 1 && seqValue2 == 2);
     }
+    
+    /**
+     * This method converts a card to its sequential numerica value
+     * @param value the value of the card.
+     * @return  the sequential value of the card.
+     */
 
     private int getSequentialValue(Value value) {
         switch (value) {
@@ -106,6 +132,13 @@ public class Hand extends GroupOfCards {
                 throw new IllegalArgumentException("Unknown card value: " + value);
         }
     }
+    
+    /**
+     * the following method adds a sequence to the list of pureSequences if it is valid.
+     * A valid sequence has at least 3 cards.
+     * @param pureSequences the list to add to the valid sequence.
+     * @param sequence the sequence to be checked and added.
+     */
 
     private void addValidSequence(List<Card> pureSequences, List<Card> sequence) {
         if (sequence.size() >= 3) {
@@ -113,6 +146,12 @@ public class Hand extends GroupOfCards {
         }
 
     }
+    
+    /**
+     * This method gets all the impure sequences from the hand.
+     * An impure sequence may consist of consecutive cards in value but from different suits.
+     * @return 
+     */
 
     public List<Card> getImpureSequence() {
         // Retrieve pure sequences and remove them from the hand
@@ -145,6 +184,15 @@ public class Hand extends GroupOfCards {
 
         return impureSequences.stream().distinct().collect(Collectors.toList());
     }
+    
+    /**
+     * Checks if two cards are impure consecutive.
+     * cards must be consecutive in value and from different suits.
+     * 
+     * @param card1
+     * @param card2
+     * @return  true if the cards are impure consecutive, false otherwise.
+     */
 
     private boolean isImpureConsecutive(PlayingCard card1, PlayingCard card2) {
         int seqValue1 = getSequentialValue(card1.getValue());
@@ -156,6 +204,13 @@ public class Hand extends GroupOfCards {
                 || (seqValue1 == 13 && seqValue2 == 1)
                 && card1.getSuit() != card2.getSuit(); // Ensure different suits
     }
+    
+    /**
+     * Checks if the hand is valid.
+     * A valid hand must have at least one pure sequence of 3 or more cards.
+     * Remaining cards must form valid impure sequences or sets.
+     * @return true if the hand is valid, false otherwise.
+     */
 
     public boolean isValidHand() {
     List<Card> pureSequences = getPureSequences();
@@ -182,6 +237,12 @@ public class Hand extends GroupOfCards {
     // - Remaining cards must form valid impure sequences or sets
     return hasPureSequence && (remainingCards.isEmpty() || hasValidImpureSequences);
 }
+    /**
+     * The following method checks if the remaining cards can form valid combinations.
+     * Valid combinations include sets (3 or more cards of the same rank) or sequences.
+     * @param remainingCards
+     * @return 
+     */
 
 
     private boolean canFormValidCombinations(List<Card> remainingCards) {
@@ -229,6 +290,12 @@ public class Hand extends GroupOfCards {
 
         return canFormSets || canFormSequences;
     }
+    
+    
+    /**
+     * method used by the player to declare hand.
+     * @return 
+     */
 
     public boolean declareHand() {
         return isValidHand();
