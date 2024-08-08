@@ -70,7 +70,8 @@ public class Hand extends GroupOfCards {
         // Check if the two cards are consecutive
         return Math.abs(seqValue1 - seqValue2) == 1
                 || (seqValue1 == 1 && seqValue2 == 13)
-                || (seqValue1 == 13 && seqValue2 == 1);
+                || (seqValue1 == 13 && seqValue2 == 1)
+                ||(seqValue1 == 1 && seqValue2 == 2);
     }
 
     private int getSequentialValue(Value value) {
@@ -157,47 +158,47 @@ public class Hand extends GroupOfCards {
     }
 
     public boolean isValidHand() {
-        List<Card> pureSequences = getPureSequences();
-        List<Card> impureSequences = getImpureSequence();
+    List<Card> pureSequences = getPureSequences();
+    List<Card> impureSequences = getImpureSequence();
+    List<Card> allCards = new ArrayList<>(getCards()); // All cards in the hand
 
-        // Check for at least one pure sequence of 3 or more cards
-        boolean hasPureSequence = pureSequences.size() >= 3;
+    // Check for at least one pure sequence of 3 or more cards
+    boolean hasPureSequence = !pureSequences.isEmpty();
 
-        // Check if we can divide impure sequences into two valid groups
-        boolean hasValidImpureSequences = false;
-        if (impureSequences.size() >= 7) { // Needs at least 7 cards to form two sequences (4 + 3)
-            int sequenceOfFourCount = 0;
-            int sequenceOfThreeCount = 0;
-
-            // Count sequences of 4 and 3 cards in impure sequences
-            for (int i = 0; i < impureSequences.size(); i++) {
-                List<Card> currentSequence = new ArrayList<>();
-                currentSequence.add(impureSequences.get(i));
-
-                for (int j = i + 1; j < impureSequences.size(); j++) {
-                    if (isImpureConsecutive((PlayingCard) impureSequences.get(j), (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
-                        currentSequence.add(impureSequences.get(j));
-                    }
-                }
-
-                if (currentSequence.size() >= 3) {
-                    if (currentSequence.size() == 4) {
-                        sequenceOfFourCount++;
-                    } else if (currentSequence.size() == 3) {
-                        sequenceOfThreeCount++;
-                    }
-                }
-            }
-
-            // Check if we have one sequence of 4 cards and one sequence of 3 cards
-            hasValidImpureSequences = sequenceOfFourCount >= 1 && sequenceOfThreeCount >= 1;
-        }
-
-        // A valid hand must have:
-        // - At least one pure sequence of 3 or more cards
-        // - One sequence of 4 cards and one sequence of 3 cards from impure sequences
-        return hasPureSequence && hasValidImpureSequences;
+    // To hold all the remaining cards after forming valid sequences
+    List<Card> remainingCards = new ArrayList<>(allCards);
+    for (Card card : pureSequences) {
+        remainingCards.remove(card);
     }
+    for (Card card : impureSequences) {
+        remainingCards.remove(card);
+    }
+
+    // After removing pure and impure sequences, remaining cards should form valid sets or sequences
+    // For simplicity, this example assumes remaining cards can form sets (combinations of cards of the same rank)
+    boolean hasValidCombinations = canFormValidCombinations(remainingCards);
+
+    // Valid hand conditions:
+    // 1. At least one pure sequence
+    // 2. Remaining cards should be arranged into valid combinations (sequences or sets)
+    return hasPureSequence && hasValidCombinations;
+}
+
+private boolean canFormValidCombinations(List<Card> remainingCards) {
+    // To form valid sets, cards should be grouped by their rank
+    Map<Value, List<Card>> rankGroups = remainingCards.stream()
+        .collect(Collectors.groupingBy(card -> ((PlayingCard) card).getValue()));
+
+    // Check if we can form sets (at least 3 cards of the same rank)
+    boolean canFormSets = rankGroups.values().stream()
+        .anyMatch(group -> group.size() >= 3);
+
+    // You can add more logic here to check for valid sequences if needed
+    // This example only checks for sets
+
+    return canFormSets;
+}
+
     
     public boolean declareHand() {
         return isValidHand();

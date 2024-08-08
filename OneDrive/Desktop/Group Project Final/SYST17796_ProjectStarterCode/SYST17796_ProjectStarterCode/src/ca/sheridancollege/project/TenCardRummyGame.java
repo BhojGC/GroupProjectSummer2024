@@ -61,25 +61,32 @@ public class TenCardRummyGame extends Game {
 
         while (gameOnGoing) {
             RummyPlayer currentPlayer = players.get(turn);
-            System.out.println(currentPlayer.getName() + " Turn:");
+            System.out.println(currentPlayer.getName() + "'s Turn:");
 
-            playerTurn(currentPlayer, turn);
-            printHand(currentPlayer);
-            printSequences(currentPlayer);
-            arrangeCards(currentPlayer);
+            playerTurn(currentPlayer, turn); // Perform the player's turn
+            arrangeAndEvaluateHand(currentPlayer, turn); // Evaluate hand after turn
 
-            if (currentPlayer.getHand().declareHand()) {
+            // Check if the player's hand contains at least one pure sequence and any other valid sequences or sets
+            boolean hasPureSequence = !currentPlayer.getHand().getPureSequences().isEmpty();
+            boolean hasValidSequencesOrSets = currentPlayer.getHand().isValidHand(); // Use isValidHand() to check overall validity
+
+            // Verify if the player's hand is valid
+            if (hasPureSequence && hasValidSequencesOrSets) {
                 System.out.println(currentPlayer.getName() + " has a valid hand.");
                 System.out.println("Enter 'D' to Declare.");
+
                 String declareInput = scanner.next();
                 if ("D".equalsIgnoreCase(declareInput)) {
-                    verifyDeclaration(currentPlayer);
-                    calculateTotalPoints();
-                    declareWinner();
-                    gameOnGoing = false;
+                    verifyDeclaration(currentPlayer); // Confirm the declaration
+                    calculateTotalPoints(); // Calculate points for all players
+                    declareWinner(); // Declare the winner based on points
+                    gameOnGoing = false; // End the game
                 }
+            } else {
+                System.out.println(currentPlayer.getName() + " does not have a valid hand.");
             }
 
+            // Move to the next player
             turn = (turn + 1) % players.size();
         }
     }
@@ -113,10 +120,13 @@ public class TenCardRummyGame extends Game {
         printSequences(player);
     }
 
-    private int calculatePoints(List<Card> cards) {
+    public int calculatePoints(List<Card> cards) {
+        // Ensure that all cards in the list are instances of PlayingCard
         return cards.stream()
-                .mapToInt(card -> ((PlayingCard) card).getValue().getPoints())
-                .sum();
+                .filter(card -> card instanceof PlayingCard) // Check if the card is an instance of PlayingCard
+                .map(card -> (PlayingCard) card) // Safely cast to PlayingCard
+                .mapToInt(playingCard -> playingCard.getValue().getPoints()) // Get the points for each card
+                .sum(); // Sum up the points
     }
 
     public void calculateTotalPoints() {
@@ -131,6 +141,7 @@ public class TenCardRummyGame extends Game {
         //printSequences(player);
         //arrangeCards(player);
         arrangeAndEvaluateHand(player, playerIndex);
+        verifyDeclaration(player);
 
         System.out.println("Enter 1 to Pick From Deck.");
         System.out.println("Enter 2 to Pick FROM Discard Pile");
@@ -158,6 +169,7 @@ public class TenCardRummyGame extends Game {
         //evaluatePointsInHand(player, playerIndex);
         //printSequences(player);
         arrangeAndEvaluateHand(player, playerIndex);
+        verifyDeclaration(player);
         System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
         int discardCardChoice = scanner.nextInt();
 
@@ -172,6 +184,7 @@ public class TenCardRummyGame extends Game {
         // Discard the card using discardToPile method
         discardToPile(player, cardToDiscard);
         arrangeAndEvaluateHand(player, playerIndex);
+        verifyDeclaration(player);
 
     }
 
@@ -186,21 +199,31 @@ public class TenCardRummyGame extends Game {
         List<Card> pureSequences = hand.getPureSequences();
         List<Card> impureSequences = hand.getImpureSequence();
 
-        // Collect all cards that are part of sequences
-        List<Card> allSequences = new ArrayList<>();
-        allSequences.addAll(pureSequences);
-        allSequences.addAll(impureSequences);
-
-        // Create a list of cards that are not part of any sequence
-        List<Card> remainingCards = new ArrayList<>(hand.getCards());
-        remainingCards.removeAll(allSequences);
-
-        // Calculate points only for remaining cards
-        pointsInHand = calculatePoints(remainingCards);
-
         // Check if the hand is valid
-        if (hand.isValidHand()) {
-            pointsInHand = 0; // If the hand is valid, points in hand are 0
+        boolean isValidHand = hand.isValidHand();
+
+        if (isValidHand) {
+            // Collect all cards that are part of sequences
+            List<Card> allSequences = new ArrayList<>();
+            allSequences.addAll(pureSequences);
+            allSequences.addAll(impureSequences);
+
+            // Create a list of cards that are not part of any sequence
+            List<Card> remainingCards = new ArrayList<>(hand.getCards());
+            remainingCards.removeAll(allSequences);
+
+            // Calculate points only for remaining cards
+            pointsInHand = calculatePoints(remainingCards);
+
+            // Subtract points for impure sequences from the total points
+            int pointsFromImpureSequences = calculatePoints(impureSequences);
+            pointsInHand -= pointsFromImpureSequences;
+
+            // Ensure points do not go below zero
+            pointsInHand = Math.max(pointsInHand, 0);
+        } else {
+            // If the hand is invalid, set points in hand to 100
+            pointsInHand = 100;
         }
 
         // Update the points in hand for the player
