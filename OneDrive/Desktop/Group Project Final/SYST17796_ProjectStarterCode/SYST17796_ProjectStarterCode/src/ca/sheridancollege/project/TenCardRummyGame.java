@@ -175,7 +175,12 @@ public class TenCardRummyGame extends Game {
 
     }
 
-    public int evaluatePointsInHand(RummyPlayer player, int playerIndex) {
+    /**
+     * @return the pointsInHand
+     */
+  
+
+    public void evaluatePointsInHand(RummyPlayer player, int playerIndex) {
         Hand hand = player.getHand();
         int pointsInHand = 0;
 
@@ -195,10 +200,16 @@ public class TenCardRummyGame extends Game {
         // Calculate points only for remaining cards
         pointsInHand = calculatePoints(remainingCards);
 
-        // Update the player's points in hand
-        player.setPointsInHand(pointsInHand);
+        // Check if the hand is valid
+        if (hand.isValidHand()) {
+            pointsInHand = 0; // If the hand is valid, points in hand are 0
+        }
 
-        return pointsInHand;
+        int[] pointsArray = new int[]{pointsInHand};
+        player.setPointsInHand(pointsArray);
+
+        // Print the points in hand for debugging
+        System.out.println(player.getName() + "'s Points in Hand: " + pointsInHand);
     }
 
     public Card drawCardFromDiscardPile(RummyPlayer player) {
@@ -346,4 +357,7 @@ public class TenCardRummyGame extends Game {
     public void setPointsInHand(int[] pointsInHand) {
         this.pointsInHand = pointsInHand;
     }
+
+
+
 }
