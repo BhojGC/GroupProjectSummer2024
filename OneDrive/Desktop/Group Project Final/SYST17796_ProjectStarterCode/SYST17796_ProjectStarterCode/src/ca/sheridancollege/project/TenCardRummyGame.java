@@ -180,37 +180,36 @@ public class TenCardRummyGame extends Game {
      */
   
 
-    public void evaluatePointsInHand(RummyPlayer player, int playerIndex) {
-        Hand hand = player.getHand();
-        int pointsInHand = 0;
+public void evaluatePointsInHand(RummyPlayer player, int playerIndex) {
+    Hand hand = player.getHand();
+    int pointsInHand = 0;
 
-        // Get the pure and impure sequences
-        List<Card> pureSequences = hand.getPureSequences();
-        List<Card> impureSequences = hand.getImpureSequence();
+    // Get the pure and impure sequences
+    List<Card> pureSequences = hand.getPureSequences();
+    List<Card> impureSequences = hand.getImpureSequence();
 
-        // Collect all cards that are part of sequences
-        List<Card> allSequences = new ArrayList<>();
-        allSequences.addAll(pureSequences);
-        allSequences.addAll(impureSequences);
+    // Collect all cards that are part of sequences
+    List<Card> allSequences = new ArrayList<>();
+    allSequences.addAll(pureSequences);
+    allSequences.addAll(impureSequences);
 
-        // Create a list of cards that are not part of any sequence
-        List<Card> remainingCards = new ArrayList<>(hand.getCards());
-        remainingCards.removeAll(allSequences);
+    // Create a list of cards that are not part of any sequence
+    List<Card> remainingCards = new ArrayList<>(hand.getCards());
+    remainingCards.removeAll(allSequences);
 
-        // Calculate points only for remaining cards
-        pointsInHand = calculatePoints(remainingCards);
+    // Calculate points only for remaining cards
+    pointsInHand = calculatePoints(remainingCards);
 
-        // Check if the hand is valid
-        if (hand.isValidHand()) {
-            pointsInHand = 0; // If the hand is valid, points in hand are 0
-        }
-
-        int[] pointsArray = new int[]{pointsInHand};
-        player.setPointsInHand(pointsArray);
-
-        // Print the points in hand for debugging
-        System.out.println(player.getName() + "'s Points in Hand: " + pointsInHand);
+    // Check if the hand is valid
+    if (hand.isValidHand()) {
+        pointsInHand = 0; // If the hand is valid, points in hand are 0
     }
+
+    player.setPointsInHand(pointsInHand);
+
+    // Print the points in hand for debugging
+    System.out.println(player.getName() + "'s Points in Hand: " + pointsInHand);
+}
 
     public Card drawCardFromDiscardPile(RummyPlayer player) {
         if (discardPile.getSize() > 0) {
