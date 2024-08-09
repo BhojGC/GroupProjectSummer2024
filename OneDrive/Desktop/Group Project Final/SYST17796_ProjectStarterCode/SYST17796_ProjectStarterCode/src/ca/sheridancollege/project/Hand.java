@@ -5,9 +5,9 @@
 package ca.sheridancollege.project;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.Comparator;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -149,20 +149,6 @@ public class Hand extends GroupOfCards {
     }
 
     /**
-     * the following method adds a sequence to the list of pureSequences if it
-     * is valid. A valid sequence has at least 3 cards.
-     *
-     * @param pureSequences the list to add to the valid sequence.
-     * @param sequence the sequence to be checked and added.
-     */
-    private void addValidSequence(List<Card> pureSequences, List<Card> sequence) {
-        if (sequence.size() >= 3) {
-            pureSequences.addAll(sequence);
-        }
-
-    }
-
-    /**
      * This method gets all the impure sequences from the hand. An impure
      * sequence may consist of consecutive cards in value but from different
      * suits.
@@ -230,35 +216,29 @@ public class Hand extends GroupOfCards {
      *
      * @return true if the hand is valid, false otherwise.
      */
-public boolean isValidHand() {
-    List<Card> pureSequences = getPureSequences();
-    List<Card> impureSequences = getImpureSequence();
+    public boolean isValidHand() {
+        List<Card> pureSequences = getPureSequences();
+        List<Card> impureSequences = getImpureSequence();
 
-    // Check if there is at least one valid pure sequence of 3 or more cards
-    boolean hasValidPureSequence = pureSequences.size() >= 3 && pureSequences.size() <= 6;
+        // Check if there is at least one valid pure sequence of 3 or more cards
+        boolean hasValidPureSequence = pureSequences.size() >= 3;
 
+        if (!hasValidPureSequence) {
+            return false; // If no valid pure sequence, the hand is not valid
+        }
 
-    if (!hasValidPureSequence) {
-        return false; // If no valid pure sequence, the hand is not valid
+        // Collect all cards that are part of pure sequences
+        List<Card> cardsInPureSequences = new ArrayList<>(pureSequences);
+
+        // Remove cards used in pure sequences from the hand
+        List<Card> remainingCards = new ArrayList<>(getCards());
+        remainingCards.removeAll(cardsInPureSequences);
+
+        // Check if remaining cards form valid impure sequences or sets
+        boolean hasValidImpureSequences = canFormValidCombinations(remainingCards);
+
+        return hasValidImpureSequences;
     }
-
-    // Collect all cards that are part of pure sequences
-    List<Card> cardsInPureSequences = new ArrayList<>(pureSequences);
-
-    // Remove cards used in pure sequences from the hand
-    List<Card> remainingCards = new ArrayList<>(getCards());
-    remainingCards.removeAll(cardsInPureSequences);
-
-    // Remove cards from impure sequences from the remaining cards
-    remainingCards.removeAll(impureSequences);
-
-    // Check if remaining cards form valid impure sequences or sets
-    boolean hasValidImpureSequences = canFormValidCombinations(remainingCards);
-
-    return hasValidPureSequence && hasValidImpureSequences;
-}
-
-
 
     /**
      * The following method checks if the remaining cards can form valid

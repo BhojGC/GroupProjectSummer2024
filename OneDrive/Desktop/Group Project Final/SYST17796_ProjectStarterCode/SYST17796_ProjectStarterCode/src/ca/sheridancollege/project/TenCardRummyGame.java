@@ -82,15 +82,14 @@ public class TenCardRummyGame extends Game {
         while (gameOnGoing) {
             RummyPlayer currentPlayer = players.get(turn);
             System.out.println(currentPlayer.getName() + "'s Turn:");
-
-            playerTurn(currentPlayer, turn); // Perform the player's turn
-            //arrangeAndEvaluateHand(currentPlayer, turn); // Evaluate hand after turn
-
+            arrangeAndEvaluateHand(currentPlayer, turn);
+            playerTurn(currentPlayer, turn); 
+            arrangeAndEvaluateHand(currentPlayer, turn);
             // Check if the player's hand is valid
             if (currentPlayer.getHand().isValidHand()) {
                 System.out.println(currentPlayer.getName() + " has a valid hand.");
                 System.out.println("Enter 'D' to Declare.");
-
+                arrangeAndEvaluateHand(currentPlayer, turn);
                 String declareInput = scanner.next();
                 if ("D".equalsIgnoreCase(declareInput)) {
                     verifyDeclaration(currentPlayer); // Confirm the declaration
@@ -98,10 +97,7 @@ public class TenCardRummyGame extends Game {
                     declareWinner(); // Declare the winner based on points
                     gameOnGoing = false; // End the game
                 }
-            } else {
-                System.out.println(currentPlayer.getName() + " does not have a valid hand.");
-            }
-
+            } 
             // Move to the next player
             turn = (turn + 1) % players.size();
         }
@@ -231,13 +227,14 @@ public class TenCardRummyGame extends Game {
     public void evaluatePointsInHand(RummyPlayer player, int playerIndex) {
         Hand hand = player.getHand();
         int pointsInHand = 0;
-
-        if (!hand.isValidHand()) {
-            pointsInHand = 100; // Invalid hand, points are 100
-        } else {
-            // Get the pure and impure sequences
+        // Get the pure and impure sequences
             List<Card> pureSequences = hand.getPureSequences();
             List<Card> impureSequences = hand.getImpureSequence();
+
+        if (hand.getPureSequences().isEmpty()) {
+            pointsInHand = 100; // Invalid hand, points are 100
+        } else {
+            
 
             // Collect all cards that are part of sequences
             List<Card> allSequences = new ArrayList<>();
