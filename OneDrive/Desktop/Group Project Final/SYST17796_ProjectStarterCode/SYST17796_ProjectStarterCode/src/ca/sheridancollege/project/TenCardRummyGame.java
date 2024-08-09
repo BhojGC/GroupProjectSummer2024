@@ -24,20 +24,20 @@ public class TenCardRummyGame extends Game {
     private Scanner scanner;
     private static TenCardRummyGame instance = null;
     
-    public TenCardRummyGame(){
-        this("");
-        
-    }
+    
 
     public TenCardRummyGame(String name) {
         super(name);
-        
+        this.scanner = new Scanner(System.in);
+        this.players = new ArrayList<>();
+        this.totalPoints = new int[2];
+        this.pointsInHand = new int[2];
 
     }
     
-    public static TenCardRummyGame getInstance(){
+    public static TenCardRummyGame getInstance(String name){
         if(instance == null){
-            instance = new TenCardRummyGame();
+            instance = new TenCardRummyGame(name);
         }
         return instance;
     }
@@ -185,12 +185,6 @@ public class TenCardRummyGame extends Game {
      * @param playerIndex
      */
     public void playerTurn(RummyPlayer player, int playerIndex) {
-        // printHand(player);
-        //printSequences(player);
-        //arrangeCards(player);
-        arrangeAndEvaluateHand(player, playerIndex);
-        //verifyDeclaration(player);
-
         System.out.println("Enter 1 to Pick From Deck.");
         System.out.println("Enter 2 to Pick FROM Discard Pile");
         int drawCardChoice = scanner.nextInt();
@@ -212,10 +206,6 @@ public class TenCardRummyGame extends Game {
                 System.out.println("Invalid Choice. Try again");
 
         }
-        //printHand(player);
-        //arrangeCards(player);
-        //evaluatePointsInHand(player, playerIndex);
-        //printSequences(player);
         arrangeAndEvaluateHand(player, playerIndex);
         System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
         int discardCardChoice = scanner.nextInt();

@@ -8,7 +8,7 @@ import java.util.Scanner;
  */
 public class Start {
 
-    private static TenCardRummyGame tenCardRummyGame = TenCardRummyGame.getInstance();
+    private static TenCardRummyGame tenCardRummyGame = TenCardRummyGame.getInstance("WELCOME");
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
