@@ -23,8 +23,6 @@ public class TenCardRummyGame extends Game {
     private int[] pointsInHand;
     private Scanner scanner;
     private static TenCardRummyGame instance = null;
-    
-    
 
     public TenCardRummyGame(String name) {
         super(name);
@@ -34,9 +32,9 @@ public class TenCardRummyGame extends Game {
         this.pointsInHand = new int[2];
 
     }
-    
-    public static TenCardRummyGame getInstance(String name){
-        if(instance == null){
+
+    public static TenCardRummyGame getInstance(String name) {
+        if (instance == null) {
             instance = new TenCardRummyGame(name);
         }
         return instance;
@@ -83,7 +81,7 @@ public class TenCardRummyGame extends Game {
             RummyPlayer currentPlayer = players.get(turn);
             System.out.println(currentPlayer.getName() + "'s Turn:");
             arrangeAndEvaluateHand(currentPlayer, turn);
-            playerTurn(currentPlayer, turn); 
+            playerTurn(currentPlayer, turn);
             arrangeAndEvaluateHand(currentPlayer, turn);
             // Check if the player's hand is valid
             if (currentPlayer.getHand().isValidHand()) {
@@ -97,7 +95,7 @@ public class TenCardRummyGame extends Game {
                     declareWinner(); // Declare the winner based on points
                     gameOnGoing = false; // End the game
                 }
-            } 
+            }
             // Move to the next player
             turn = (turn + 1) % players.size();
         }
@@ -181,44 +179,50 @@ public class TenCardRummyGame extends Game {
      * @param playerIndex
      */
     public void playerTurn(RummyPlayer player, int playerIndex) {
-        System.out.println("Enter 1 to Pick From Deck.");
-        System.out.println("Enter 2 to Pick FROM Discard Pile");
-        int drawCardChoice = scanner.nextInt();
+        boolean validDrawChoice = false;
 
-        switch (drawCardChoice) {
-            case 1:
-                Card drawnFromDeck = drawCardFromDeck(player);
-                if (drawnFromDeck != null) {
-                    player.getHand().addCard(drawnFromDeck);
-                }
-                break;
-            case 2:
-                Card drawnFromPile = drawCardFromDiscardPile(player);
-                if (drawnFromPile != null) {
-                    player.getHand().addCard(drawnFromPile);
-                }
-                break;
-            default:
-                System.out.println("Invalid Choice. Try again");
+        while (!validDrawChoice) {
+            System.out.println("Enter 1 to Pick From Deck.");
+            System.out.println("Enter 2 to Pick FROM Discard Pile");
+            int drawCardChoice = scanner.nextInt();
 
+            switch (drawCardChoice) {
+                case 1:
+                    Card drawnFromDeck = drawCardFromDeck(player);
+                    if (drawnFromDeck != null) {
+                        player.getHand().addCard(drawnFromDeck);
+                        validDrawChoice = true;
+                    }
+                    break;
+                case 2:
+                    Card drawnFromPile = drawCardFromDiscardPile(player);
+                    if (drawnFromPile != null) {
+                        player.getHand().addCard(drawnFromPile);
+                        validDrawChoice = true;
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid Choice. Try again");
+
+            }
         }
         arrangeAndEvaluateHand(player, playerIndex);
-        System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
-        int discardCardChoice = scanner.nextInt();
+        boolean validDiscardChoice = false;
+        while (!validDiscardChoice) {
+            System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
+            int discardCardChoice = scanner.nextInt();
 
-        if (discardCardChoice < 1 || discardCardChoice > player.getHand().getCards().size()) {
-            System.out.println("Invalid choice. Please enter a valid number.");
-            return;
+            if (discardCardChoice >= 1 || discardCardChoice <= player.getHand().getCards().size()) {
+                Card cardToDiscard = player.getHand().getCards().get(discardCardChoice - 1);
+                discardToPile(player, cardToDiscard);
+            validDiscardChoice = true;
+
+            }else{
+                System.out.println("Invalid choice.Please enter a valid number.");
+            }
         }
 
-        // Get the card to discard
-        Card cardToDiscard = player.getHand().getCards().get(discardCardChoice - 1);
-
-        // Discard the card using discardToPile method
-        discardToPile(player, cardToDiscard);
-        arrangeAndEvaluateHand(player, playerIndex);
-        //verifyDeclaration(player);
-
+           arrangeAndEvaluateHand(player,playerIndex);
     }
 
     /**
@@ -228,13 +232,12 @@ public class TenCardRummyGame extends Game {
         Hand hand = player.getHand();
         int pointsInHand = 0;
         // Get the pure and impure sequences
-            List<Card> pureSequences = hand.getPureSequences();
-            List<Card> impureSequences = hand.getImpureSequence();
+        List<Card> pureSequences = hand.getPureSequences();
+        List<Card> impureSequences = hand.getImpureSequence();
 
         if (hand.getPureSequences().isEmpty()) {
             pointsInHand = 100; // Invalid hand, points are 100
         } else {
-            
 
             // Collect all cards that are part of sequences
             List<Card> allSequences = new ArrayList<>();
