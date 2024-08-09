@@ -53,36 +53,31 @@ public class Hand extends GroupOfCards {
      *
      * @returns A list of pure sequence cards.
      */
-    public List<PlayingCard> getPureSequences() {
-        List<Card> handCards = getCards();
-        List<PlayingCard> pureSequences = new ArrayList<>();
+    public List<Card> getPureSequences() {
+        List<Card> pureSequences = new ArrayList<>();
 
-        // Filter and sort cards by suit and then by value
-        List<PlayingCard> sortedCards = handCards.stream()
-                .filter(card -> card instanceof PlayingCard)
+        // Sort cards by suit, then by value
+        List<PlayingCard> sortedCards = getCards().stream()
                 .map(card -> (PlayingCard) card)
                 .sorted(Comparator.comparing(PlayingCard::getSuit)
                         .thenComparing(card -> card.getValue().getPoints()))
                 .collect(Collectors.toList());
 
-        List<PlayingCard> currentSequence = new ArrayList<>();
-        PlayingCard lastCard = null;
+        List<Card> currentSequence = new ArrayList<>();
+        Suit currentSuit = null;
 
         for (PlayingCard card : sortedCards) {
-            if (currentSequence.isEmpty()
-                    || (card.getSuit() == currentSequence.get(0).getSuit()
-                    && isConsecutive(card, lastCard))) {
-                currentSequence.add(card);
-            } else {
+            if (currentSuit == null || card.getSuit() != currentSuit
+                    || !isConsecutive(card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+                // If the suit changes or the sequence breaks, process the current sequence
                 if (currentSequence.size() >= 3) {
-                    // Add sequence if valid and not empty
                     pureSequences.addAll(currentSequence);
                 }
-                // Reset for the next sequence
+                // Start a new sequence
                 currentSequence.clear();
-                currentSequence.add(card);
+                currentSuit = card.getSuit();
             }
-            lastCard = card;
+            currentSequence.add(card);
         }
 
         // Check the last sequence
@@ -90,8 +85,7 @@ public class Hand extends GroupOfCards {
             pureSequences.addAll(currentSequence);
         }
 
-        // Remove duplicates by converting to a Set and back to a List
-        return new ArrayList<>(new HashSet<>(pureSequences));
+        return pureSequences.stream().distinct().collect(Collectors.toList());
     }
 
     /**
