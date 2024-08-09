@@ -7,6 +7,7 @@ package ca.sheridancollege.project;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +42,8 @@ public class Hand extends GroupOfCards {
         getCards().remove(card);
         setSize(getSize() - 1);
     }
-/*
+
+    /*
     /**
      * This method is responsible for getting all pure sequences from the
      * players hand. A pure sequence will consist of cards of the same suit in
@@ -93,20 +95,19 @@ public class Hand extends GroupOfCards {
      * @return true if the cards are consecutive, false otherwise.
      */
     public boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
-    int seqValue1 = getSequentialValue(card1.getValue());
-    int seqValue2 = getSequentialValue(card2.getValue());
+        int seqValue1 = getSequentialValue(card1.getValue());
+        int seqValue2 = getSequentialValue(card2.getValue());
 
-    // Ensure cards are of the same suit
-    if (card1.getSuit() != card2.getSuit()) {
-        return false;
+        // Ensure cards are of the same suit
+        if (card1.getSuit() != card2.getSuit()) {
+            return false;
+        }
+
+        // Check if the cards are consecutive in value
+        return Math.abs(seqValue1 - seqValue2) == 1
+                || (seqValue1 == 1 && seqValue2 == 13) // Ace high
+                || (seqValue1 == 13 && seqValue2 == 1); // Ace low
     }
-
-    // Check if the cards are consecutive in value
-    return Math.abs(seqValue1 - seqValue2) == 1
-            || (seqValue1 == 1 && seqValue2 == 13) // Ace high
-            || (seqValue1 == 13 && seqValue2 == 1); // Ace low
-}
-
 
     /**
      * This method converts a card to its sequential numerical value
@@ -219,8 +220,7 @@ public class Hand extends GroupOfCards {
         return Math.abs(seqValue1 - seqValue2) == 1
                 || (seqValue1 == 1 && seqValue2 == 13) // Ace high/low
                 || (seqValue1 == 13 && seqValue2 == 1);
-                
-                
+
     }
 
     /**
@@ -230,7 +230,7 @@ public class Hand extends GroupOfCards {
      *
      * @return true if the hand is valid, false otherwise.
      */
-    public boolean isValidHand() {
+public boolean isValid() {
     List<Card> pureSequences = getPureSequences();
     List<Card> impureSequences = getImpureSequence();
 
@@ -319,7 +319,5 @@ public class Hand extends GroupOfCards {
 
         return null;
     }
-    
-
 
 }
