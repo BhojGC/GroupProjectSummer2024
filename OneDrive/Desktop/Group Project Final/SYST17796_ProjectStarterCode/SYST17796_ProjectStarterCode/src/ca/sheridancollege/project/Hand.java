@@ -221,14 +221,17 @@ public boolean isValidHand() {
     List<Card> pureSequences = getPureSequences();
     List<Card> impureSequences = getImpureSequence();
 
-    // Check if there is at least one pure sequence of 3 or more cards
+    // Ensure there is at least one pure sequence of 3 or more cards
     if (pureSequences.size() >= 3) {
-        // Check if the remaining cards can be formed into valid impure sequences or sets
-        List<Card> remainingCards = new ArrayList<>(getCards());
-        remainingCards.removeAll(pureSequences);
-        remainingCards.removeAll(impureSequences);
+        // Create a list of all cards used in pure and impure sequences
+        List<Card> usedCards = new ArrayList<>(pureSequences);
+        usedCards.addAll(impureSequences);
 
-        // All remaining cards must be part of valid impure sequences or sets
+        // Create a list of remaining cards in the hand
+        List<Card> remainingCards = new ArrayList<>(getCards());
+        remainingCards.removeAll(usedCards);
+
+        // If there are any remaining cards, they must form valid impure sequences or sets
         if (canFormValidCombinations(remainingCards)) {
             return true;
         }
@@ -239,6 +242,7 @@ public boolean isValidHand() {
 }
 
 
+
     /**
      * The following method checks if the remaining cards can form valid
      * combinations. Valid combinations include sets (3 or more cards of the
@@ -247,51 +251,63 @@ public boolean isValidHand() {
      * @param remainingCards
      * @return
      */
-    private boolean canFormValidCombinations(List<Card> remainingCards) {
-        if (remainingCards == null || remainingCards.size() < 3) {
-            return false; // Not enough cards to form valid combinations
-        }
+   private boolean canFormValidCombinations(List<Card> remainingCards) {
+    if (remainingCards == null || remainingCards.size() < 3) {
+        return false; // Not enough cards to form valid combinations
+    }
 
-        // Sort cards by rank
-        remainingCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card).getValue().ordinal()));
+    // Sort cards by rank
+    remainingCards.sort(Comparator.comparingInt(card -> ((PlayingCard) card).getValue().ordinal()));
 
-        // To form valid sets, cards should be grouped by their rank
-        Map<Value, List<Card>> rankGroups = remainingCards.stream()
-                .collect(Collectors.groupingBy(card -> ((PlayingCard) card).getValue()));
+    // To form valid sets, cards should be grouped by their rank
+    Map<Value, List<Card>> rankGroups = remainingCards.stream()
+            .collect(Collectors.groupingBy(card -> ((PlayingCard) card).getValue()));
 
-        // Check if we can form sets (at least 3 cards of the same rank)
-        boolean canFormSets = rankGroups.values().stream()
-                .anyMatch(group -> group.size() >= 3);
+    // Check if we can form sets (at least 3 cards of the same rank)
+    boolean canFormSets = rankGroups.values().stream()
+            .anyMatch(group -> group.size() >= 3);
 
-        // Check for valid sequences (runs)
-        boolean canFormSequences = false;
-        List<Card> sequence = new ArrayList<>();
+    // Check for valid sequences (runs)
+    List<List<Card>> sequences = findSequences(remainingCards);
 
-        for (int i = 0; i < remainingCards.size(); i++) {
-            if (sequence.isEmpty()) {
-                sequence.add(remainingCards.get(i));
+    // Check if sequences or sets are valid
+    boolean hasValidSequences = sequences.stream().anyMatch(seq -> seq.size() >= 3);
+
+    return canFormSets || hasValidSequences;
+}
+
+/**
+ * Helper method to find all possible sequences (runs) in the given list of cards.
+ */
+private List<List<Card>> findSequences(List<Card> cards) {
+    List<List<Card>> sequences = new ArrayList<>();
+    List<Card> currentSequence = new ArrayList<>();
+
+    for (int i = 0; i < cards.size(); i++) {
+        if (currentSequence.isEmpty()) {
+            currentSequence.add(cards.get(i));
+        } else {
+            Card lastCard = currentSequence.get(currentSequence.size() - 1);
+            if (isConsecutive((PlayingCard) cards.get(i), (PlayingCard) lastCard)) {
+                currentSequence.add(cards.get(i));
             } else {
-                Card lastCard = sequence.get(sequence.size() - 1);
-                if (isConsecutive((PlayingCard) remainingCards.get(i), (PlayingCard) lastCard)) {
-                    sequence.add(remainingCards.get(i));
-                } else {
-                    if (sequence.size() >= 3) {
-                        canFormSequences = true; // Found a valid sequence
-                        break;
-                    }
-                    sequence.clear();
-                    sequence.add(remainingCards.get(i));
+                if (currentSequence.size() >= 3) {
+                    sequences.add(new ArrayList<>(currentSequence)); // Add the current sequence
                 }
+                currentSequence.clear();
+                currentSequence.add(cards.get(i));
             }
         }
-
-        // Check if the last sequence is valid
-        if (sequence.size() >= 3) {
-            canFormSequences = true;
-        }
-
-        return canFormSets || canFormSequences;
     }
+
+    // Add the last sequence if it's valid
+    if (currentSequence.size() >= 3) {
+        sequences.add(currentSequence);
+    }
+
+    return sequences;
+}
+
 
     /**
      * method used by the player to declare hand.
