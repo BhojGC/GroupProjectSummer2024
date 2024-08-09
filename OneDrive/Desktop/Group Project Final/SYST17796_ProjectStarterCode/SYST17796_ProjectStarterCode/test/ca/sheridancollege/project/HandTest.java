@@ -71,7 +71,7 @@ public class HandTest {
         PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.TWO);
         PlayingCard card2 = new PlayingCard(Suit.SPADES, Value.THREE);
         Hand hand = new Hand();
-        boolean expResult = true;
+        boolean expResult = false;
         boolean result = hand.isConsecutive(card1, card2);
         assertEquals(expResult, result);
 
@@ -183,6 +183,43 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = false;
+        boolean result = hand.isValidHand();
+        assertEquals(expResult, result);
+
+    }
+    
+        @Test
+    public void isValidHandBoundry() {
+        Hand hand = new Hand();
+
+        System.out.println("Testing for is Valid Boundry");
+        PlayingCard card1 = new PlayingCard(Suit.CLUBS, Value.ACE);
+        PlayingCard card2 = new PlayingCard(Suit.CLUBS, Value.KING);
+        PlayingCard card3 = new PlayingCard(Suit.CLUBS, Value.QUEEN);
+
+        hand.addCard(card1);
+        hand.addCard(card2);
+        hand.addCard(card3);
+
+        PlayingCard card4 = new PlayingCard(Suit.CLUBS, Value.FOUR);
+        PlayingCard card5 = new PlayingCard(Suit.DIAMONDS, Value.FOUR);
+        PlayingCard card6 = new PlayingCard(Suit.HEARTS, Value.FOUR);
+
+        hand.addCard(card4);
+        hand.addCard(card5);
+        hand.addCard(card6);
+
+        PlayingCard card7 = new PlayingCard(Suit.CLUBS, Value.ACE);
+        PlayingCard card8 = new PlayingCard(Suit.CLUBS, Value.TWO);
+        PlayingCard card9 = new PlayingCard(Suit.CLUBS, Value.THREE);
+        PlayingCard card10 = new PlayingCard(Suit.CLUBS, Value.FOUR);
+
+        hand.addCard(card7);
+        hand.addCard(card8);
+        hand.addCard(card9);
+        hand.addCard(card10);
+
+        boolean expResult = true;
         boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 

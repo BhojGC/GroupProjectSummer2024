@@ -41,7 +41,7 @@ public class Hand extends GroupOfCards {
         getCards().remove(card);
         setSize(getSize() - 1);
     }
-
+/*
     /**
      * This method is responsible for getting all pure sequences from the
      * players hand. A pure sequence will consist of cards of the same suit in
@@ -93,15 +93,20 @@ public class Hand extends GroupOfCards {
      * @return true if the cards are consecutive, false otherwise.
      */
     public boolean isConsecutive(PlayingCard card1, PlayingCard card2) {
-        // Cards must be of the same suit to be part of a pure sequence
-        if (card1.getSuit() != card2.getSuit()) {
-            return false;
-        }
+    int seqValue1 = getSequentialValue(card1.getValue());
+    int seqValue2 = getSequentialValue(card2.getValue());
 
-        // Check if the values are consecutive
-        int valueDiff = card2.getValue().getPoints() - card1.getValue().getPoints();
-        return valueDiff == 1; // True if card2 follows directly after card1
+    // Ensure cards are of the same suit
+    if (card1.getSuit() != card2.getSuit()) {
+        return false;
     }
+
+    // Check if the cards are consecutive in value
+    return Math.abs(seqValue1 - seqValue2) == 1
+            || (seqValue1 == 1 && seqValue2 == 13) // Ace high
+            || (seqValue1 == 13 && seqValue2 == 1); // Ace low
+}
+
 
     /**
      * This method converts a card to its sequential numerical value
@@ -213,8 +218,9 @@ public class Hand extends GroupOfCards {
         // Cards must be consecutive in value and from different suits
         return Math.abs(seqValue1 - seqValue2) == 1
                 || (seqValue1 == 1 && seqValue2 == 13) // Ace high/low
-                || (seqValue1 == 13 && seqValue2 == 1)
-                && card1.getSuit() != card2.getSuit(); // Ensure different suits
+                || (seqValue1 == 13 && seqValue2 == 1);
+                
+                
     }
 
     /**
@@ -225,27 +231,25 @@ public class Hand extends GroupOfCards {
      * @return true if the hand is valid, false otherwise.
      */
     public boolean isValidHand() {
-        List<Card> pureSequences = getPureSequences();
+    List<Card> pureSequences = getPureSequences();
+    List<Card> impureSequences = getImpureSequence();
 
-        // Check for at least one pure sequence of 3 or more cards
-        boolean hasPureSequence = pureSequences.size() >= 3;
-
-        // Remaining cards after forming pure sequences
+    // Check if there is at least one pure sequence of 3 or more cards
+    if (pureSequences.size() >= 3) {
+        // Check if the remaining cards can be formed into valid impure sequences or sets
         List<Card> remainingCards = new ArrayList<>(getCards());
         remainingCards.removeAll(pureSequences);
+        remainingCards.removeAll(impureSequences);
 
-        // Check if the remaining cards can form valid impure sequences or sets
-        boolean hasValidImpureSequences = false;
-        if (!remainingCards.isEmpty()) {
-            // Verify if remaining cards can form valid impure sequences or sets
-            hasValidImpureSequences = canFormValidCombinations(remainingCards);
+        // All remaining cards must be part of valid impure sequences or sets
+        if (canFormValidCombinations(remainingCards)) {
+            return true;
         }
-
-        // A valid hand must have:
-        // - At least one pure sequence of 3 or more cards
-        // - Remaining cards must form valid impure sequences or sets
-        return hasPureSequence && (remainingCards.isEmpty() || hasValidImpureSequences);
     }
+
+    // If the conditions aren't met, the hand is not valid
+    return false;
+}
 
     /**
      * The following method checks if the remaining cards can form valid
@@ -299,7 +303,7 @@ public class Hand extends GroupOfCards {
         }
 
         return canFormSets || canFormSequences;
-    }
+    }/*
 
     /**
      * method used by the player to declare hand.
@@ -315,5 +319,7 @@ public class Hand extends GroupOfCards {
 
         return null;
     }
+    
+
 
 }
