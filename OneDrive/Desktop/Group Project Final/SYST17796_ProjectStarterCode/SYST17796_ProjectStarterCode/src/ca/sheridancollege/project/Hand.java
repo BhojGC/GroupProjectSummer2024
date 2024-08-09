@@ -229,10 +229,28 @@ public class Hand extends GroupOfCards {
             }
         }
 
-        // If the conditions aren't met, the hand is not valid
-        return false;
+        
+    }/*
+    public boolean isValidHand() {
+        List<Card> pureSequences = getPureSequences();
+        List<Card> impureSequences = getImpureSequence();
+
+        //Count pure sequences of at least 3 cards
+        int pureCount = pureSequences.size();
+        int impureCount = impureSequences.size();
+        if(pureCount >= 3 && (pureCount + impureCount) == 10){
+            return true;
+        }else if(pureSequences.size() == 3 && impureSequences.size() == 7){
+            return true;
+        }else if(pureSequences.size() == 6 && impureSequences.size() == 4){
+            return true;
+        }else if(pureSequences.size() == 4 && impureSequences.size() == 6){
+            return true;
+        }
+        return false;       
+
     }
-    */
+*/
     /**
      * The following method checks if the remaining cards can form valid
      * combinations. Valid combinations include sets (3 or more cards of the
@@ -262,8 +280,9 @@ public class Hand extends GroupOfCards {
 
         // Check if sequences or sets are valid
         boolean hasValidSequences = sequences.stream().anyMatch(seq -> seq.size() >= 3);
+         boolean hasInvalidSequences = sequences.stream().anyMatch(seq -> seq.size() >= 3);
 
-        return canFormSets || hasValidSequences;
+        return canFormSets || hasValidSequences || hasInvalidSequences;
     }
 
     /**
@@ -313,7 +332,8 @@ public class Hand extends GroupOfCards {
 
         return null;
     }
-/*
+
+    /*
     public boolean isValidHand() {
         List<Card> pureSequences = getPureSequences();
         List<Card> impureSequences = getImpure();
@@ -324,8 +344,8 @@ public class Hand extends GroupOfCards {
 
         // Check for valid combinations
         return pureCount >= 3 && (pureCount + impureCount) == 10;
-    }
-*/
+    }*/
+ /*
     public boolean isValidHand(){
          List<Card> pureSequences = getPureSequences();
          List<Card> impureSequences = getImpure();
@@ -344,6 +364,7 @@ public class Hand extends GroupOfCards {
     }
     return false;
     }
+     */
 
     public List<Card> getImpure() {
         List<Card> impureSequence = new ArrayList<>();
