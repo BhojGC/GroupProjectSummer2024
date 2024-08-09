@@ -8,6 +8,8 @@ import java.util.Scanner;
  */
 public class Start {
 
+    private static TenCardRummyGame tenCardRummyGame = TenCardRummyGame.getInstance();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int numOfPlayers = 0;
@@ -65,13 +67,11 @@ public class Start {
 
         }
 
-        TenCardRummyGame rummyGame = new TenCardRummyGame("Ten Card Rummy Game");
-
         // Initialize the game with the players
-        rummyGame.intializeGame(players);
+        tenCardRummyGame.intializeGame(players);
 
         // Start the game
-        rummyGame.play();
+        tenCardRummyGame.play();
 
         scanner.close();
     }

@@ -22,14 +22,24 @@ public class TenCardRummyGame extends Game {
     private int[] totalPoints;
     private int[] pointsInHand;
     private Scanner scanner;
+    private static TenCardRummyGame instance = null;
+    
+    public TenCardRummyGame(){
+        this("");
+        
+    }
 
     public TenCardRummyGame(String name) {
         super(name);
-        this.scanner = new Scanner(System.in);
-        this.players = new ArrayList<>();
-        this.totalPoints = new int[2];
-        this.pointsInHand = new int[2];
+        
 
+    }
+    
+    public static TenCardRummyGame getInstance(){
+        if(instance == null){
+            instance = new TenCardRummyGame();
+        }
+        return instance;
     }
 
     /**
