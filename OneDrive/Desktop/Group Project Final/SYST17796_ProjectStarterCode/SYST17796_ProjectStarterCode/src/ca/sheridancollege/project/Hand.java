@@ -230,26 +230,35 @@ public class Hand extends GroupOfCards {
      *
      * @return true if the hand is valid, false otherwise.
      */
-public boolean isValid() {
+public boolean isValidHand() {
     List<Card> pureSequences = getPureSequences();
     List<Card> impureSequences = getImpureSequence();
 
-    // Check if there is at least one pure sequence of 3 or more cards
-    if (pureSequences.size() >= 3) {
-        // Check if the remaining cards can be formed into valid impure sequences or sets
-        List<Card> remainingCards = new ArrayList<>(getCards());
-        remainingCards.removeAll(pureSequences);
-        remainingCards.removeAll(impureSequences);
+    // Check if there is at least one valid pure sequence of 3 or more cards
+    boolean hasValidPureSequence = pureSequences.size() >= 3 && pureSequences.size() <= 6;
 
-        // All remaining cards must be part of valid impure sequences or sets
-        if (canFormValidCombinations(remainingCards)) {
-            return true;
-        }
+
+    if (!hasValidPureSequence) {
+        return false; // If no valid pure sequence, the hand is not valid
     }
 
-    // If the conditions aren't met, the hand is not valid
-    return false;
+    // Collect all cards that are part of pure sequences
+    List<Card> cardsInPureSequences = new ArrayList<>(pureSequences);
+
+    // Remove cards used in pure sequences from the hand
+    List<Card> remainingCards = new ArrayList<>(getCards());
+    remainingCards.removeAll(cardsInPureSequences);
+
+    // Remove cards from impure sequences from the remaining cards
+    remainingCards.removeAll(impureSequences);
+
+    // Check if remaining cards form valid impure sequences or sets
+    boolean hasValidImpureSequences = canFormValidCombinations(remainingCards);
+
+    return hasValidPureSequence && hasValidImpureSequences;
 }
+
+
 
     /**
      * The following method checks if the remaining cards can form valid
@@ -303,7 +312,7 @@ public boolean isValid() {
         }
 
         return canFormSets || canFormSequences;
-    }/*
+    }
 
     /**
      * method used by the player to declare hand.
