@@ -135,10 +135,10 @@ public class HandTest {
         hand.addCard(card5);
         hand.addCard(card6);
 
-        PlayingCard card7 = new PlayingCard(Suit.CLUBS, Value.ACE);
-        PlayingCard card8 = new PlayingCard(Suit.DIAMONDS, Value.TWO);
-        PlayingCard card9 = new PlayingCard(Suit.HEARTS, Value.THREE);
-        PlayingCard card10 = new PlayingCard(Suit.SPADES, Value.FOUR);
+        PlayingCard card7 = new PlayingCard(Suit.CLUBS, Value.TWO);
+        PlayingCard card8 = new PlayingCard(Suit.DIAMONDS, Value.THREE);
+        PlayingCard card9 = new PlayingCard(Suit.HEARTS, Value.FOUR);
+        PlayingCard card10 = new PlayingCard(Suit.SPADES, Value.FIVE);
 
         hand.addCard(card7);
         hand.addCard(card8);
@@ -257,7 +257,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = true;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
@@ -294,7 +294,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = true;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
@@ -328,7 +328,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = true;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
@@ -362,7 +362,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = true;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
@@ -397,7 +397,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = true;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
@@ -431,7 +431,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = true;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
@@ -467,7 +467,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = true;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
@@ -502,7 +502,7 @@ public class HandTest {
         hand.addCard(card10);
 
         boolean expResult = false;
-        boolean result = hand.canForm();
+        boolean result = hand.isValidHand();
         assertEquals(expResult, result);
 
     }
