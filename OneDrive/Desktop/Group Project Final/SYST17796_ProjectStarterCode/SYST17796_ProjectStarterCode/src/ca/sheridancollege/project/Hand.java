@@ -324,45 +324,40 @@ public class Hand extends GroupOfCards {
 
 
     
-    public List<Card> getImpure() {
-    List<Card> impureSequence = new ArrayList<>();
-    List<Card> allCards = new ArrayList<>(getCards());
-    List<Card> pureSequences = getPureSequences();
-    
-    // Remove pure sequences from all cards
-    allCards.removeAll(pureSequences);
+   public List<Card> getImpure() {
+        List<Card> impureSequences = new ArrayList<>();
 
-    // Sort the remaining cards
-    List<PlayingCard> sortedCards = allCards.stream()
-            .map(card -> (PlayingCard) card)
-            .sorted(Comparator.comparing(PlayingCard::getSuit)
-                    .thenComparing(card -> card.getValue().getPoints()))
-            .collect(Collectors.toList());
+        // Retrieve the pure sequences first
+        List<Card> pureSequences = getPureSequences();
+        List<PlayingCard> remainingCards = getCards().stream()
+                .map(card -> (PlayingCard) card)
+                .filter(card -> !pureSequences.contains(card))
+                .sorted(Comparator.comparingInt(card -> getSequentialValue(card.getValue())))
+                .collect(Collectors.toList());
 
-    List<Card> currentSequence = new ArrayList<>();
-    Suit currentSuit = null;
+        List<Card> currentSequence = new ArrayList<>();
 
-    for (PlayingCard card : sortedCards) {
-        if (currentSuit == null || card.getSuit() != currentSuit
-                || (currentSequence.size() > 0 && !isImpureConsecutive(card, (PlayingCard) currentSequence.get(currentSequence.size() - 1)))) {
-            // Process the current sequence if it has at least 3 cards
-            if (currentSequence.size() > 1) { // Adjust based on valid impure sequence length
-                impureSequence.addAll(currentSequence);
+        for (PlayingCard card : remainingCards) {
+            if (currentSequence.isEmpty()
+                    || isImpureConsecutive(card, (PlayingCard) currentSequence.get(currentSequence.size() - 1))) {
+                currentSequence.add(card);
+            } else {
+                // If sequence breaks, add to impure sequences if valid
+                if (currentSequence.size() >= 3) {
+                    impureSequences.addAll(currentSequence);
+                }
+                currentSequence.clear();
+                currentSequence.add(card);
             }
-            // Start a new sequence
-            currentSequence.clear();
-            currentSuit = card.getSuit();
         }
-        currentSequence.add(card);
-    }
 
-    // Check the last sequence
-    if (currentSequence.size() > 1) { // Adjust based on valid impure sequence length
-        impureSequence.addAll(currentSequence);
-    }
+        // Check the last sequence
+        if (currentSequence.size() >= 3) {
+            impureSequences.addAll(currentSequence);
+        }
 
-    return impureSequence;
-}
+        return impureSequences;
+    }
 
 
       
