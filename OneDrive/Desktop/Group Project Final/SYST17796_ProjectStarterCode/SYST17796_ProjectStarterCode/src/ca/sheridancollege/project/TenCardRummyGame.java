@@ -180,7 +180,7 @@ public class TenCardRummyGame extends Game {
      */
     public void playerTurn(RummyPlayer player, int playerIndex) {
         boolean validDrawChoice = false;
-
+        arrangeAndEvaluateHand(player, playerIndex);
         while (!validDrawChoice) {
             System.out.println("Enter 1 to Pick From Deck.");
             System.out.println("Enter 2 to Pick FROM Discard Pile");
