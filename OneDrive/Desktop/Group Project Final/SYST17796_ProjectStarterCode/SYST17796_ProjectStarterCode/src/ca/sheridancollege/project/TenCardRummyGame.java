@@ -44,7 +44,7 @@ public class TenCardRummyGame extends Game {
      * the following method initializes the game by setting up players,
      * creating, shuffling and dealing cards and setting up the discard pile.
      *
-     * @param gcbho
+     * @param gamePlayers
      */
     public void intializeGame(RummyPlayer[] gamePlayers) {
         this.players.addAll(List.of(gamePlayers));
@@ -82,7 +82,7 @@ public class TenCardRummyGame extends Game {
             System.out.println(currentPlayer.getName() + "'s Turn:");
             arrangeAndEvaluateHand(currentPlayer, turn);
             playerTurn(currentPlayer, turn);
-            arrangeAndEvaluateHand(currentPlayer, turn);
+            //
             // Check if the player's hand is valid
             if (currentPlayer.getHand().isValidHand()) {
                 System.out.println(currentPlayer.getName() + " has a valid hand.");
@@ -180,7 +180,7 @@ public class TenCardRummyGame extends Game {
      */
     public void playerTurn(RummyPlayer player, int playerIndex) {
         boolean validDrawChoice = false;
-        arrangeAndEvaluateHand(player, playerIndex);
+        
         while (!validDrawChoice) {
             System.out.println("Enter 1 to Pick From Deck.");
             System.out.println("Enter 2 to Pick FROM Discard Pile");
@@ -206,7 +206,7 @@ public class TenCardRummyGame extends Game {
 
             }
         }
-        arrangeAndEvaluateHand(player, playerIndex);
+       public void arrangeAndEvaluateHand(player, playerIndex);
         boolean validDiscardChoice = false;
         while (!validDiscardChoice) {
             System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
