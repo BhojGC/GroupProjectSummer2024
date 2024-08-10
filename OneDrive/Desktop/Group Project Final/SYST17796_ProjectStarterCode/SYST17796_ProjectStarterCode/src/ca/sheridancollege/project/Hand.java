@@ -210,7 +210,7 @@ public class Hand extends GroupOfCards {
      */
     public boolean isValidHand() {
         List<Card> pureSequences = getPureSequences();
-        List<Card> impureSequences = getImpureSequence();
+        List<Card> impureSequences = getImpure();
 
         //Count pure sequences of at least 3 cards
         int pureCount = pureSequences.size();
