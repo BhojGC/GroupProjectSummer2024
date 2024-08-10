@@ -471,6 +471,7 @@ public class HandTest {
         assertEquals(expResult, result);
 
     }
+
     @Test
     public void canFormCase8() {
         Hand hand = new Hand();

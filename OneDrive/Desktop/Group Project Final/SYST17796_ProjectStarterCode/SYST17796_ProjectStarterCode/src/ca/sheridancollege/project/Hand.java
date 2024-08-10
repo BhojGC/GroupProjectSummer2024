@@ -228,7 +228,7 @@ public class Hand extends GroupOfCards {
 
     }
 
-      /**
+    /**
      * method used by the player to declare hand.
      *
      * @return
@@ -243,6 +243,53 @@ public class Hand extends GroupOfCards {
         return null;
     }
 
-     
+    public List<Card> getImpure() {
+        List<Card> impureSequences = new ArrayList<>();
+        List<Card> allCards = new ArrayList<>(getCards());
+
+        // Sort the cards by suit and value
+        List<PlayingCard> sortedCards = allCards.stream()
+                .map(card -> (PlayingCard) card)
+                .sorted(Comparator.comparing(PlayingCard::getSuit)
+                        .thenComparing(card -> card.getValue().getPoints()))
+                .collect(Collectors.toList());
+
+        // Identify impure sequences
+        for (int i = 0; i < sortedCards.size() - 3; i++) {
+            PlayingCard card1 = sortedCards.get(i);
+            for (int j = i + 1; j < sortedCards.size() - 2; j++) {
+                PlayingCard card2 = sortedCards.get(j);
+                for (int k = j + 1; k < sortedCards.size() - 1; k++) {
+                    PlayingCard card3 = sortedCards.get(k);
+                    for (int l = k + 1; l < sortedCards.size(); l++) {
+                        PlayingCard card4 = sortedCards.get(l);
+
+                        // Check if cards form an impure sequence
+                        if (card1.getSuit() != card2.getSuit()
+                                && card2.getSuit() != card3.getSuit()
+                                && card3.getSuit() != card4.getSuit()
+                                && isImpureConsecutive(card1, card2)
+                                && isImpureConsecutive(card2, card3)
+                                && isImpureConsecutive(card3, card4)) {
+                            if (!impureSequences.contains(card1)) {
+                                impureSequences.add(card1);
+                            }
+                            if (!impureSequences.contains(card2)) {
+                                impureSequences.add(card2);
+                            }
+                            if (!impureSequences.contains(card3)) {
+                                impureSequences.add(card3);
+                            }
+                            if (!impureSequences.contains(card4)) {
+                                impureSequences.add(card4);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return impureSequences;
+    }
 
 }
