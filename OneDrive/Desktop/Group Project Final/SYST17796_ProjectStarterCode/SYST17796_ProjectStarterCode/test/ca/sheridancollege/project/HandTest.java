@@ -209,10 +209,10 @@ public class HandTest {
         hand.addCard(card5);
         hand.addCard(card6);
 
-        PlayingCard card7 = new PlayingCard(Suit.CLUBS, Value.ACE);
-        PlayingCard card8 = new PlayingCard(Suit.CLUBS, Value.TWO);
-        PlayingCard card9 = new PlayingCard(Suit.CLUBS, Value.THREE);
-        PlayingCard card10 = new PlayingCard(Suit.CLUBS, Value.FOUR);
+        PlayingCard card7 = new PlayingCard(Suit.CLUBS, Value.TWO);
+        PlayingCard card8 = new PlayingCard(Suit.CLUBS, Value.THREE);
+        PlayingCard card9 = new PlayingCard(Suit.CLUBS, Value.FOUR);
+        PlayingCard card10 = new PlayingCard(Suit.CLUBS, Value.FIVE);
 
         hand.addCard(card7);
         hand.addCard(card8);
@@ -492,7 +492,7 @@ public class HandTest {
         hand.addCard(card5);
         hand.addCard(card6);
 
-        PlayingCard card7 = new PlayingCard(Suit.CLUBS, Value.FIVE);
+        PlayingCard card7 = new PlayingCard(Suit.HEARTS, Value.FIVE);
         PlayingCard card8 = new PlayingCard(Suit.CLUBS, Value.SIX);
         PlayingCard card9 = new PlayingCard(Suit.DIAMONDS, Value.SEVEN);
         PlayingCard card10 = new PlayingCard(Suit.SPADES, Value.TEN);
