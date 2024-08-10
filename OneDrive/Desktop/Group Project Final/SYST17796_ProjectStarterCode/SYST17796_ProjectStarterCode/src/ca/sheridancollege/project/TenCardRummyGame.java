@@ -206,7 +206,7 @@ public class TenCardRummyGame extends Game {
 
             }
         }
-       public void arrangeAndEvaluateHand(player, playerIndex);
+       arrangeAndEvaluateHand(player, playerIndex);
         boolean validDiscardChoice = false;
         while (!validDiscardChoice) {
             System.out.println("Enter the number of the card you want to discard (1-" + player.getHand().getCards().size() + "):");
